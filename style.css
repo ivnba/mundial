@@ -1,0 +1,1931 @@
+body{
+background:#050505;
+color:white;
+font-family:Arial;
+margin:0;
+}
+.topbar{
+display:flex;
+justify-content:center;
+gap:10px;
+padding:20px;
+background:#111;
+}
+button,input{
+padding:12px;
+border:none;
+border-radius:10px;
+}
+button{
+background:#ff0080;
+color:white;
+cursor:pointer;
+}
+.battle{
+display:flex;
+justify-content:space-around;
+align-items:center;
+margin:50px auto;
+width:90%;
+background:#111;
+padding:30px;
+border-radius:20px;
+border:2px solid #00ffff;
+}
+.team{
+text-align:center;
+}
+.team img{
+width:180px;
+height:180px;
+border-radius:50%;
+}
+.score{
+font-size:80px;
+color:#00ffff;
+}
+.timer{
+font-size:70px;
+}
+.progress{
+width:300px;
+height:25px;
+background:#222;
+border-radius:20px;
+overflow:hidden;
+margin:auto;
+}
+.bar{
+height:100%;
+width:50%;
+background:#00ffff;
+}
+.buttons{
+text-align:center;
+}
+.flash{
+    animation: flashAnim 0.2s;
+}
+
+@keyframes flashAnim{
+
+    0%{
+        background:#ff0080;
+    }
+
+    100%{
+        background:#050505;
+    }
+
+}
+.wins{
+
+    font-size:25px;
+    margin-top:10px;
+    color:#ffcc00;
+
+}
+
+.race-track{
+
+    width:90%;
+    margin:30px auto;
+
+}
+
+.car-area{
+
+    width:100%;
+    height:70px;
+    background:#111;
+    border:2px solid #00ffff;
+    margin-bottom:20px;
+    position:relative;
+    overflow:hidden;
+    border-radius:15px;
+
+}
+
+.car{
+
+    position:absolute;
+    left:0;
+    top:10px;
+    font-size:40px;
+    transition:0.3s;
+
+}
+
+.flash{
+
+    animation:flashAnim 0.2s;
+
+}
+
+@keyframes flashAnim{
+
+    0%{
+
+        background:#ff0080;
+
+    }
+
+    100%{
+
+        background:#050505;
+
+    }
+
+}
+/* ========================= */
+/* BRACKET REAL */
+/* ========================= */
+
+.bracket-container{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    height:100%;
+
+    gap:20px;
+
+}
+
+.round{
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    gap:30px;
+
+}
+
+.round-title{
+
+    text-align:center;
+
+    font-size:22px;
+
+    font-weight:bold;
+
+    color:#00ffff;
+
+    margin-bottom:20px;
+
+}
+
+.match{
+
+    background:#111;
+
+    padding:15px;
+
+    border-radius:15px;
+
+    border:2px solid #00ffff;
+
+    min-width:180px;
+
+    text-align:center;
+
+    font-size:18px;
+
+    box-shadow:0 0 15px #00ffff;
+
+}
+
+.winner{
+
+    border:2px solid #ff0080;
+
+    box-shadow:0 0 15px #ff0080;
+
+}
+
+.champion{
+
+    background:linear-gradient(45deg,#ffcc00,#ff8800);
+
+    padding:25px;
+
+    border-radius:20px;
+
+    font-size:28px;
+
+    font-weight:bold;
+
+    text-align:center;
+
+    color:black;
+
+    box-shadow:0 0 30px gold;
+
+}
+/* ========================= */
+/* CRONOGRAMA */
+/* ========================= */
+
+.schedule-container{
+
+    width:100%;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:15px;
+
+    margin-top:20px;
+
+    overflow:auto;
+
+    max-height:85vh;
+
+}
+
+.schedule-match{
+
+    background:#111;
+
+    border:2px solid #00ffff;
+
+    border-radius:15px;
+
+    padding:15px;
+
+    box-shadow:0 0 15px #00ffff;
+
+    transition:0.3s;
+
+}
+
+.schedule-match:hover{
+
+    transform:scale(1.03);
+
+    border-color:#ff0080;
+
+    box-shadow:0 0 20px #ff0080;
+
+}
+
+.match-time{
+
+    font-size:18px;
+
+    color:#ffcc00;
+
+    margin-bottom:10px;
+
+    font-weight:bold;
+
+}
+
+.teams{
+
+    font-size:22px;
+
+    font-weight:bold;
+
+    text-align:center;
+
+}
+
+.teams span{
+
+    color:#ff0080;
+
+    margin:0 10px;
+
+}
+/* ========================= */
+/* NEON PRO DESIGN */
+/* ========================= */
+
+body{
+
+    margin:0;
+
+    background:
+    radial-gradient(circle at top,#1a0033,#050505 60%);
+
+    color:white;
+
+    font-family:Arial, Helvetica, sans-serif;
+
+    overflow:hidden;
+
+}
+
+/* ========================= */
+/* HEADER */
+/* ========================= */
+
+.top-header{
+
+    width:100%;
+
+    height:90px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:42px;
+
+    font-weight:bold;
+
+    letter-spacing:4px;
+
+    background:
+    linear-gradient(
+        90deg,
+        #ff0080,
+        #7a00ff,
+        #00e1ff
+    );
+
+    color:white;
+
+    text-shadow:
+    0 0 10px #fff,
+    0 0 20px #ff00ff,
+    0 0 40px #00ffff;
+
+    box-shadow:
+    0 0 20px #ff00ff,
+    0 0 40px #00ffff;
+
+    border-bottom:3px solid #00ffff;
+
+}
+
+/* ========================= */
+/* MAIN */
+/* ========================= */
+
+.main-container{
+
+    width:100%;
+
+    height:calc(100vh - 90px);
+
+    display:flex;
+
+}
+
+/* ========================= */
+/* SIDE PANELS */
+/* ========================= */
+
+.left-panel,
+.right-panel{
+
+    width:18%;
+
+    background:
+    rgba(10,10,20,0.92);
+
+    backdrop-filter:blur(10px);
+
+    border-right:2px solid #00ffff;
+
+    box-shadow:
+    0 0 20px rgba(0,255,255,0.4);
+
+    padding:20px;
+
+    box-sizing:border-box;
+
+    overflow:auto;
+
+}
+
+.right-panel{
+
+    border-left:2px solid #ff00aa;
+
+}
+
+/* ========================= */
+/* TITLES */
+/* ========================= */
+
+.left-panel h2,
+.right-panel h2{
+
+    text-align:center;
+
+    color:white;
+
+    font-size:28px;
+
+    text-shadow:
+    0 0 10px #00ffff,
+    0 0 20px #ff00ff;
+
+    margin-bottom:30px;
+
+}
+
+/* ========================= */
+/* CENTER */
+/* ========================= */
+
+.center-panel{
+
+    width:64%;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    position:relative;
+
+}
+
+/* ========================= */
+/* TIMER */
+/* ========================= */
+
+.timer-box{
+
+    margin-top:20px;
+
+    width:320px;
+
+    height:110px;
+
+    background:
+    rgba(0,0,0,0.7);
+
+    border:3px solid #ff00aa;
+
+    border-radius:25px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:70px;
+
+    font-weight:bold;
+
+    color:white;
+
+    text-shadow:
+    0 0 15px #ff00ff,
+    0 0 35px #00ffff;
+
+    box-shadow:
+    0 0 20px #ff00aa,
+    0 0 40px #00ffff;
+
+}
+
+/* ========================= */
+/* FLAGS */
+/* ========================= */
+
+.battle-container{
+
+    width:100%;
+
+    display:flex;
+
+    justify-content:space-around;
+
+    align-items:center;
+
+    margin-top:40px;
+
+}
+
+.team{
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    width:35%;
+
+}
+
+.team img{
+
+    width:220px;
+
+    height:220px;
+
+    border-radius:50%;
+
+    border:5px solid #00ffff;
+
+    object-fit:cover;
+
+    box-shadow:
+    0 0 20px #00ffff,
+    0 0 40px #00ffff,
+    0 0 80px #00ffff;
+
+}
+
+/* ========================= */
+/* COUNTRY */
+/* ========================= */
+
+.country-name{
+
+    margin-top:20px;
+
+    font-size:38px;
+
+    font-weight:bold;
+
+    color:white;
+
+    text-shadow:
+    0 0 10px #00ffff,
+    0 0 30px #ff00ff;
+
+}
+
+/* ========================= */
+/* SCORE */
+/* ========================= */
+
+.score{
+
+    font-size:100px;
+
+    font-weight:bold;
+
+    margin-top:10px;
+
+    color:#00ffff;
+
+    text-shadow:
+    0 0 20px #00ffff,
+    0 0 50px #00ffff;
+
+}
+
+/* ========================= */
+/* WINS */
+/* ========================= */
+
+.wins{
+
+    margin-top:10px;
+
+    font-size:30px;
+
+    color:#ffcc00;
+
+    text-shadow:
+    0 0 10px gold,
+    0 0 20px orange;
+
+}
+
+/* ========================= */
+/* VS */
+/* ========================= */
+
+.vs{
+
+    font-size:90px;
+
+    font-weight:bold;
+
+    color:white;
+
+    text-shadow:
+    0 0 20px #ff00ff,
+    0 0 40px #00ffff;
+
+    animation:vsPulse 1s infinite;
+
+}
+
+@keyframes vsPulse{
+
+    0%{
+
+        transform:scale(1);
+
+    }
+
+    50%{
+
+        transform:scale(1.1);
+
+    }
+
+    100%{
+
+        transform:scale(1);
+
+    }
+
+}
+
+/* ========================= */
+/* PROGRESS BAR */
+/* ========================= */
+
+.progress-container{
+
+    width:85%;
+
+    height:45px;
+
+    margin-top:40px;
+
+    background:#111;
+
+    border-radius:30px;
+
+    overflow:hidden;
+
+    border:3px solid #00ffff;
+
+    box-shadow:
+    0 0 20px #00ffff;
+
+}
+
+.progress-bar{
+
+    width:50%;
+
+    height:100%;
+
+    background:
+    linear-gradient(
+        90deg,
+        #0066ff,
+        #00ffff,
+        #00ff88
+    );
+
+    box-shadow:
+    0 0 20px #00ffff;
+
+}
+
+/* ========================= */
+/* RACE */
+/* ========================= */
+
+.race-section{
+
+    width:90%;
+
+    margin-top:40px;
+
+}
+
+.race-track{
+
+    width:100%;
+
+    height:70px;
+
+    margin-bottom:20px;
+
+    background:
+    rgba(20,20,30,0.8);
+
+    border-radius:20px;
+
+    border:2px solid #00ffff;
+
+    position:relative;
+
+    overflow:hidden;
+
+    box-shadow:
+    0 0 20px #00ffff;
+
+}
+
+.car{
+
+    position:absolute;
+
+    left:0;
+
+    top:10px;
+
+    font-size:45px;
+
+    transition:0.3s;
+
+    filter:
+    drop-shadow(0 0 10px #fff)
+    drop-shadow(0 0 20px #00ffff);
+
+}
+
+/* ========================= */
+/* RANKING */
+/* ========================= */
+
+.ranking-user{
+
+    background:
+    rgba(15,15,25,0.9);
+
+    border:2px solid #00ffff;
+
+    border-radius:15px;
+
+    padding:15px;
+
+    margin-bottom:15px;
+
+    font-size:22px;
+
+    box-shadow:
+    0 0 15px #00ffff;
+
+    transition:0.3s;
+
+}
+
+.ranking-user:hover{
+
+    transform:scale(1.05);
+
+    border-color:#ff00ff;
+
+    box-shadow:
+    0 0 25px #ff00ff;
+
+}
+
+/* ========================= */
+/* CRONOGRAMA */
+/* ========================= */
+
+.schedule-match{
+
+    background:
+    rgba(15,15,25,0.9);
+
+    border:2px solid #ff00aa;
+
+    border-radius:15px;
+
+    padding:15px;
+
+    margin-bottom:20px;
+
+    box-shadow:
+    0 0 15px #ff00aa;
+
+    transition:0.3s;
+
+}
+
+.schedule-match:hover{
+
+    transform:scale(1.03);
+
+    box-shadow:
+    0 0 25px #00ffff;
+
+}
+
+.match-time{
+
+    font-size:18px;
+
+    color:#ffcc00;
+
+    margin-bottom:10px;
+
+    text-shadow:
+    0 0 10px gold;
+
+}
+
+.teams{
+
+    font-size:22px;
+
+    font-weight:bold;
+
+    text-align:center;
+
+    color:white;
+
+}
+
+.teams span{
+
+    color:#ff00aa;
+
+    margin:0 10px;
+
+    text-shadow:
+    0 0 10px #ff00ff;
+
+}
+
+/* ========================= */
+/* FLASH EFFECT */
+/* ========================= */
+
+.flash{
+
+    animation:flashAnim 0.2s;
+
+}
+
+@keyframes flashAnim{
+
+    0%{
+
+        background:#ff00aa;
+
+    }
+
+    100%{
+
+        background:#050505;
+
+    }
+
+}
+/* ========================= */
+/* RANKING LATERAL PRO */
+/* ========================= */
+
+.ranking-container{
+
+    width:100%;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:15px;
+
+}
+
+/* USER CARD */
+
+.ranking-user{
+
+    width:100%;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    background:
+    rgba(15,15,25,0.95);
+
+    border:2px solid #00ffff;
+
+    border-radius:18px;
+
+    padding:15px;
+
+    box-sizing:border-box;
+
+    box-shadow:
+    0 0 15px #00ffff;
+
+    transition:0.3s;
+
+}
+
+/* HOVER */
+
+.ranking-user:hover{
+
+    transform:scale(1.04);
+
+    border-color:#ff00aa;
+
+    box-shadow:
+    0 0 25px #ff00aa;
+
+}
+
+/* TOP COLORS */
+
+.top1{
+
+    border-color:gold;
+
+    box-shadow:
+    0 0 20px gold;
+
+}
+
+.top2{
+
+    border-color:silver;
+
+    box-shadow:
+    0 0 20px silver;
+
+}
+
+.top3{
+
+    border-color:#cd7f32;
+
+    box-shadow:
+    0 0 20px #cd7f32;
+
+}
+
+/* RANK NUMBER */
+
+.rank-number{
+
+    width:60px;
+
+    height:60px;
+
+    border-radius:50%;
+
+    background:
+    linear-gradient(
+        45deg,
+        #ff00aa,
+        #00ffff
+    );
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:24px;
+
+    font-weight:bold;
+
+    color:white;
+
+    text-shadow:
+    0 0 10px white;
+
+    box-shadow:
+    0 0 15px #00ffff;
+
+}
+
+/* INFO */
+
+.rank-info{
+
+    flex:1;
+
+}
+
+/* USERNAME */
+
+.username{
+
+    font-size:24px;
+
+    font-weight:bold;
+
+    color:white;
+
+    text-shadow:
+    0 0 10px #00ffff;
+
+}
+
+/* COINS */
+
+.coins{
+
+    margin-top:5px;
+
+    font-size:20px;
+
+    color:#ffcc00;
+
+    text-shadow:
+    0 0 10px gold;
+
+}
+/* ========================= */
+/* TIMER PROFESIONAL */
+/* ========================= */
+
+.timer-wrapper{
+
+    position:relative;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    margin-top:20px;
+
+}
+
+/* GLOW */
+
+.timer-glow{
+
+    position:absolute;
+
+    width:360px;
+
+    height:120px;
+
+    background:
+    radial-gradient(
+        circle,
+        rgba(255,0,170,0.5),
+        transparent 70%
+    );
+
+    filter:blur(25px);
+
+    z-index:0;
+
+    animation:glowPulse 2s infinite;
+
+}
+
+/* TIMER BOX */
+
+.timer-box{
+
+    position:relative;
+
+    z-index:1;
+
+    width:340px;
+
+    height:110px;
+
+    border-radius:25px;
+
+    background:
+    linear-gradient(
+        135deg,
+        rgba(20,20,30,0.95),
+        rgba(5,5,15,0.95)
+    );
+
+    border:3px solid #00ffff;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:75px;
+
+    font-weight:bold;
+
+    color:white;
+
+    letter-spacing:4px;
+
+    text-shadow:
+    0 0 10px #fff,
+    0 0 20px #00ffff,
+    0 0 40px #ff00aa;
+
+    box-shadow:
+    0 0 20px #00ffff,
+    0 0 40px #ff00aa,
+    inset 0 0 15px rgba(255,255,255,0.1);
+
+    overflow:hidden;
+
+}
+
+/* SHINE EFFECT */
+
+.timer-box::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:200%;
+
+    height:100%;
+
+    background:
+    linear-gradient(
+        120deg,
+        transparent,
+        rgba(255,255,255,0.15),
+        transparent
+    );
+
+    transform:translateX(-100%);
+
+    animation:shineMove 3s infinite;
+
+}
+
+/* LABEL */
+
+.timer-label{
+
+    margin-top:12px;
+
+    font-size:22px;
+
+    font-weight:bold;
+
+    color:#ffcc00;
+
+    text-shadow:
+    0 0 10px gold,
+    0 0 20px orange;
+
+    letter-spacing:2px;
+
+}
+
+/* PULSE */
+
+@keyframes glowPulse{
+
+    0%{
+
+        transform:scale(1);
+
+        opacity:0.7;
+
+    }
+
+    50%{
+
+        transform:scale(1.08);
+
+        opacity:1;
+
+    }
+
+    100%{
+
+        transform:scale(1);
+
+        opacity:0.7;
+
+    }
+
+}
+
+/* SHINE */
+
+@keyframes shineMove{
+
+    0%{
+
+        transform:translateX(-100%);
+
+    }
+
+    100%{
+
+        transform:translateX(100%);
+
+    }
+
+}
+/* ========================= */
+/* WORLD CUP PANEL */
+/* ========================= */
+
+.worldcup-panel{
+
+    width:100%;
+
+    height:100vh;
+
+    background:
+    radial-gradient(circle at top,#190033,#040404 60%);
+
+    color:white;
+
+    overflow:hidden;
+
+    font-family:Arial;
+
+}
+
+/* HEADER */
+
+.worldcup-header{
+
+    width:100%;
+
+    height:90px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:45px;
+
+    font-weight:bold;
+
+    background:
+    linear-gradient(
+        90deg,
+        #ff0080,
+        #6a00ff,
+        #00ffff
+    );
+
+    text-shadow:
+    0 0 15px white,
+    0 0 30px #00ffff;
+
+    box-shadow:
+    0 0 25px #00ffff;
+
+}
+
+/* MAIN */
+
+.worldcup-main{
+
+    width:100%;
+
+    height:calc(100vh - 90px);
+
+    display:flex;
+
+}
+
+/* SIDE */
+
+.side-panel{
+
+    width:20%;
+
+    background:
+    rgba(10,10,20,0.95);
+
+    backdrop-filter:blur(12px);
+
+    padding:20px;
+
+    box-sizing:border-box;
+
+    overflow:auto;
+
+}
+
+.left-side{
+
+    border-right:2px solid #00ffff;
+
+}
+
+.right-side{
+
+    border-left:2px solid #ff00aa;
+
+}
+
+/* TITLE */
+
+.panel-title{
+
+    font-size:28px;
+
+    text-align:center;
+
+    margin-bottom:25px;
+
+    font-weight:bold;
+
+    text-shadow:
+    0 0 10px #00ffff,
+    0 0 25px #ff00aa;
+
+}
+
+/* RANKING */
+
+.ranking-card{
+
+    background:
+    rgba(15,15,25,0.95);
+
+    border:2px solid #00ffff;
+
+    border-radius:18px;
+
+    padding:15px;
+
+    margin-bottom:15px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    font-size:20px;
+
+    box-shadow:
+    0 0 15px #00ffff;
+
+}
+
+.top1{
+
+    border-color:gold;
+
+    box-shadow:
+    0 0 20px gold;
+
+}
+
+.top2{
+
+    border-color:silver;
+
+    box-shadow:
+    0 0 20px silver;
+
+}
+
+.top3{
+
+    border-color:#cd7f32;
+
+    box-shadow:
+    0 0 20px #cd7f32;
+
+}
+
+/* CENTER */
+
+.center-stage{
+
+    width:60%;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+}
+
+/* TIMER */
+
+.pro-timer{
+
+    margin-top:20px;
+
+    width:320px;
+
+    height:100px;
+
+    border-radius:25px;
+
+    border:3px solid #00ffff;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    background:
+    rgba(10,10,20,0.95);
+
+    box-shadow:
+    0 0 20px #00ffff,
+    0 0 40px #ff00aa;
+
+}
+
+.timer-text{
+
+    font-size:70px;
+
+    font-weight:bold;
+
+    text-shadow:
+    0 0 15px #00ffff,
+    0 0 30px #ff00aa;
+
+}
+
+/* BATTLE */
+
+.battle-stage{
+
+    width:100%;
+
+    display:flex;
+
+    justify-content:space-around;
+
+    align-items:center;
+
+    margin-top:40px;
+
+}
+
+/* COUNTRY */
+
+.country-box{
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+}
+
+.country-box img{
+
+    width:220px;
+
+    height:220px;
+
+    border-radius:50%;
+
+    border:5px solid #00ffff;
+
+    box-shadow:
+    0 0 20px #00ffff,
+    0 0 50px #00ffff;
+
+}
+
+.country-title{
+
+    margin-top:20px;
+
+    font-size:36px;
+
+    font-weight:bold;
+
+    text-shadow:
+    0 0 15px #00ffff;
+
+}
+
+.country-score{
+
+    font-size:100px;
+
+    color:#00ffff;
+
+    font-weight:bold;
+
+    text-shadow:
+    0 0 20px #00ffff;
+
+}
+
+.country-wins{
+
+    font-size:28px;
+
+    color:gold;
+
+    text-shadow:
+    0 0 10px gold;
+
+}
+
+/* VS */
+
+.versus{
+
+    font-size:90px;
+
+    font-weight:bold;
+
+    text-shadow:
+    0 0 20px #ff00aa,
+    0 0 40px #00ffff;
+
+    animation:vsPulse 1s infinite;
+
+}
+
+@keyframes vsPulse{
+
+    0%{transform:scale(1);}
+    50%{transform:scale(1.1);}
+    100%{transform:scale(1);}
+
+}
+
+/* BAR */
+
+.progress-worldcup{
+
+    width:85%;
+
+    height:40px;
+
+    margin-top:40px;
+
+    background:#111;
+
+    border-radius:30px;
+
+    overflow:hidden;
+
+    border:3px solid #00ffff;
+
+    box-shadow:
+    0 0 20px #00ffff;
+
+}
+
+.progress-fill{
+
+    width:50%;
+
+    height:100%;
+
+    background:
+    linear-gradient(
+        90deg,
+        #0066ff,
+        #00ffff,
+        #00ff99
+    );
+
+}
+
+/* RACE */
+
+.race-worldcup{
+
+    width:90%;
+
+    margin-top:35px;
+
+}
+
+.race-line{
+
+    width:100%;
+
+    height:70px;
+
+    background:
+    rgba(15,15,25,0.9);
+
+    border:2px solid #00ffff;
+
+    border-radius:15px;
+
+    margin-bottom:20px;
+
+    position:relative;
+
+    overflow:hidden;
+
+}
+
+.race-car{
+
+    position:absolute;
+
+    left:0;
+
+    top:10px;
+
+    font-size:45px;
+
+    transition:0.3s;
+
+    filter:
+    drop-shadow(0 0 10px white)
+    drop-shadow(0 0 20px #00ffff);
+
+}
+
+/* SCHEDULE */
+
+.schedule-card{
+
+    background:
+    rgba(15,15,25,0.95);
+
+    border:2px solid #ff00aa;
+
+    border-radius:18px;
+
+    padding:18px;
+
+    margin-bottom:18px;
+
+    text-align:center;
+
+    font-size:20px;
+
+    box-shadow:
+    0 0 15px #ff00aa;
+
+}
+/* ========================= */
+/* TOURNAMENT PANEL */
+/* ========================= */
+
+.tournament-panel{
+
+    width:100%;
+
+    height:100vh;
+
+    background:
+    radial-gradient(circle at top,#160028,#040404 60%);
+
+    overflow:hidden;
+
+    color:white;
+
+    font-family:Arial;
+
+}
+
+/* HEADER */
+
+.panel-header{
+
+    width:100%;
+
+    height:90px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:45px;
+
+    font-weight:bold;
+
+    letter-spacing:4px;
+
+    background:
+    linear-gradient(
+        90deg,
+        #ff0080,
+        #5d00ff,
+        #00ffff
+    );
+
+    text-shadow:
+    0 0 15px white,
+    0 0 30px #00ffff;
+
+    box-shadow:
+    0 0 25px #00ffff;
+
+}
+
+/* WRAPPER */
+
+.bracket-wrapper{
+
+    width:100%;
+
+    height:calc(100vh - 90px);
+
+    display:flex;
+
+    justify-content:space-evenly;
+
+    align-items:center;
+
+    padding:20px;
+
+    box-sizing:border-box;
+
+}
+
+/* COLUMN */
+
+.round-column{
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    gap:25px;
+
+}
+
+/* TITLE */
+
+.round-title{
+
+    text-align:center;
+
+    font-size:28px;
+
+    font-weight:bold;
+
+    margin-bottom:20px;
+
+    color:white;
+
+    text-shadow:
+    0 0 10px #00ffff,
+    0 0 25px #ff00aa;
+
+}
+
+/* MATCH */
+
+.match-card{
+
+    min-width:220px;
+
+    padding:18px;
+
+    border-radius:18px;
+
+    background:
+    rgba(15,15,25,0.95);
+
+    border:2px solid #00ffff;
+
+    text-align:center;
+
+    font-size:22px;
+
+    font-weight:bold;
+
+    box-shadow:
+    0 0 18px #00ffff;
+
+    transition:0.3s;
+
+}
+
+.match-card:hover{
+
+    transform:scale(1.05);
+
+    border-color:#ff00aa;
+
+    box-shadow:
+    0 0 25px #ff00aa;
+
+}
+
+/* WINNER */
+
+.winner{
+
+    border-color:#ff00aa;
+
+    box-shadow:
+    0 0 20px #ff00aa;
+
+}
+
+/* SEMIFINAL */
+
+.champion-path{
+
+    border-color:#ffcc00;
+
+    box-shadow:
+    0 0 20px gold;
+
+}
+
+/* FINAL */
+
+.final-card{
+
+    min-width:260px;
+
+    padding:30px;
+
+    border-radius:25px;
+
+    text-align:center;
+
+    font-size:30px;
+
+    font-weight:bold;
+
+    background:
+    linear-gradient(
+        135deg,
+        #2a003f,
+        #111
+    );
+
+    border:3px solid #00ffff;
+
+    box-shadow:
+    0 0 25px #00ffff,
+    0 0 45px #ff00aa;
+
+    text-shadow:
+    0 0 10px #00ffff;
+
+}
+
+/* CHAMPION */
+
+.champion-card{
+
+    margin-top:30px;
+
+    padding:30px;
+
+    border-radius:30px;
+
+    text-align:center;
+
+    font-size:34px;
+
+    font-weight:bold;
+
+    color:black;
+
+    background:
+    linear-gradient(
+        135deg,
+        gold,
+        orange
+    );
+
+    box-shadow:
+    0 0 30px gold,
+    0 0 60px orange;
+
+    animation:champGlow 2s infinite;
+
+}
+
+/* GLOW */
+
+@keyframes champGlow{
+
+    0%{
+
+        transform:scale(1);
+
+    }
+
+    50%{
+
+        transform:scale(1.05);
+
+    }
+
+    100%{
+
+        transform:scale(1);
+
+    }
+
+}

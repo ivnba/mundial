@@ -54,3 +54,27 @@ function actualizarNombresEquipos() {
         if(elDer) elDer.innerText = nombreDer;
     }
 }
+document.addEventListener('click', function(e) {
+    // Si haces clic en un elemento que sea un partido o tenga la clase 'match-card'
+    if (e.target.closest('.match-card')) {
+        setTimeout(actualizarNombresEquipos, 100); // Espera un milisegundo para que el sistema procese el clic
+    }
+});
+
+function actualizarNombresEquipos() {
+    const partidoActivo = document.querySelector('.match-card.active');
+    if (!partidoActivo) return;
+    
+    const slots = partidoActivo.querySelectorAll('.team-slot');
+    if(slots.length >= 2) {
+        // Obtenemos los nombres y quitamos cualquier bandera que pueda haber ahí
+        const nombreIzq = slots[0].innerText.replace('undefined', '').trim();
+        const nombreDer = slots[1].innerText.replace('undefined', '').trim();
+        
+        const elIzq = document.getElementById('titulo-izq');
+        const elDer = document.getElementById('titulo-der');
+        
+        if(elIzq) elIzq.innerText = nombreIzq;
+        if(elDer) elDer.innerText = nombreDer;
+    }
+}

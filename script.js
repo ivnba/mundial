@@ -1,69 +1,56 @@
-// --- VARIABLES GLOBALES ---
-let timerInterval; 
-let puntosL = 0;
-let puntosR = 0;
+let puntosL = 0, puntosR = 0;
+let activeMatchId = "match-o1";
+let timerInterval = null;
 
-// --- CONFIGURACIÓN DE REGALOS ---
-const mapaRegalos = {
-    "Rosa": "img/regalo_1_t1.png",
-    "Capibara": "img/regalo_10_t1.png",
-    "Hat": "img/regalo_30_t1.png",
-    "Perfume": "img/regalo_100_t1.png",
-    "AnimalMascot": "img/regalo_500_t1.png",
-    "MoneyBag": "img/regalo_1000_t1.png",
-    "MoneyBagLarge": "img/regalo_5000_t1.png"
-};
+// --- FUNCIONES DE CONTROL ---
 
-// --- LÓGICA DE REGALOS ---
-function actualizarContadorRegalo(nombreRegalo, equipo) {
-    const sufijo = equipo === 'Team1' ? 't1' : 't2';
-    const idElemento = `rose-text-${sufijo}`; 
-    const elemento = document.getElementById(idElemento);
-    if (elemento) {
-        let actual = parseInt(elemento.innerText || 0);
-        elemento.innerText = actual + 1;
-        elemento.parentElement.classList.add('flash');
-        setTimeout(() => elemento.parentElement.classList.remove('flash'), 200);
-    }
-}
-
-// --- CONEXIÓN A TIKFINITY ---
-const socket = new WebSocket('ws://localhost:8080');
-
-socket.onmessage = function(event) {
-    const data = JSON.parse(event.data);
-    
-    // 1. Regalos
-    if (data.event === 'gift') {
-        actualizarContadorRegalo(data.giftName, data.team);
-    }
-    
-    // 2. Aquí irían otros eventos de tu lógica anterior
-};
-
-// --- TUS FUNCIONES ANTIGUAS (Copiadas de tu archivo original) ---
-function setActiveMatch(id) {
-    console.log("Activando partido:", id);
-    // ... aquí va tu lógica original de selección ...
-}
-
-function resetTableroCompleto(limpiarTodo = true) {
-    puntosL = 0; puntosR = 0;
-    clearInterval(timerInterval);
-    document.getElementById('timer-string').innerText = "00:00";
-    console.log("Tablero reseteado");
-}
-
-// Asegúrate de cerrar la última llave del archivo:
-console.log("Script cargado correctamente.");
-// script.js
 function iniciarPartido() {
-    // 1. Aquí va lo que quieres que pase
-    console.log("¡El partido ha comenzado!");
+    console.log("Iniciando batalla...");
+    clearInterval(timerInterval);
+    let duracion = parseInt(document.getElementById('select-duration').value);
     
-    // 2. Por ejemplo, activar el reloj
-    startTimer(); 
+    timerInterval = setInterval(() => {
+        duracion--;
+        let min = Math.floor(duracion / 60).toString().padStart(2, '0');
+        let sec = (duracion % 60).toString().padStart(2, '0');
+        document.getElementById('timer-string').innerText = `${min}:${sec}`;
+
+        if (duracion <= 0) {
+            clearInterval(timerInterval);
+            alert("¡Tiempo terminado!");
+        }
+    }, 1000);
+}
+
+function sumarPuntos(lado, cant) {
+    if (lado === 'izq') {
+        puntosL += cant;
+        document.getElementById('score-val-l').innerText = puntosL;
+    } else {
+        puntosR += cant;
+        document.getElementById('score-val-r').innerText = puntosR;
+    }
     
-    // 3. Cambiar el texto del botón si quieres
-    document.getElementById('btn-iniciar').innerText = "PARTIDO EN CURSO...";
+    // Calcular barra
+    let total = puntosL + puntosR;
+    let porcentaje = total === 0 ? 50 : (puntosL / total * 100);
+    document.getElementById('energy-bar').style.width = porcentaje + '%';
+}
+
+function setActiveMatch(id) {
+    activeMatchId = id;
+    document.querySelectorAll('.match-box-node').forEach(el => el.classList.remove('active-match'));
+    document.getElementById(id).classList.add('active-match');
+}
+
+function openSetupModal() {
+    document.getElementById('modal-setup').classList.add('open');
+}
+
+function resetTableroCompleto() {
+    puntosL = 0; puntosR = 0;
+    document.getElementById('score-val-l').innerText = "0";
+    document.getElementById('score-val-r').innerText = "0";
+    document.getElementById('timer-string').innerText = "00:00";
+    clearInterval(timerInterval);
 }

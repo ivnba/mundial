@@ -1957,3 +1957,13 @@ body{
     color: #fff;
     text-shadow: 0 0 5px #000;
 }
+/* style.css */
+button {
+    background-color: #ff0080;
+    transition: 0.3s; /* Esto hace que el cambio sea suave */
+}
+
+button:hover {
+    background-color: #ff3399; /* Se vuelve más claro al pasar el mouse */
+    cursor: pointer;
+}

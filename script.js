@@ -56,3 +56,14 @@ function resetTableroCompleto(limpiarTodo = true) {
 
 // Asegúrate de cerrar la última llave del archivo:
 console.log("Script cargado correctamente.");
+// script.js
+function iniciarPartido() {
+    // 1. Aquí va lo que quieres que pase
+    console.log("¡El partido ha comenzado!");
+    
+    // 2. Por ejemplo, activar el reloj
+    startTimer(); 
+    
+    // 3. Cambiar el texto del botón si quieres
+    document.getElementById('btn-iniciar').innerText = "PARTIDO EN CURSO...";
+}

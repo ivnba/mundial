@@ -29,3 +29,19 @@ function actualizarRegalo(nombreRecibido, equipo) {
         }
     }
 }
+function actualizarNombresEquipos() {
+    // Buscamos el partido activo (el que tiene la clase 'active' o el que tengas seleccionado)
+    // Ajusta '.team-slot' según tu estructura real
+    const partidoActivo = document.querySelector('.match-card.active') || document.getElementById('match-o1');
+    const slots = partidoActivo.querySelectorAll('.team-slot');
+    
+    if(slots.length >= 2) {
+        // Obtenemos los nombres (ejemplo: quitando el formato HTML de la bandera)
+        const nombreIzq = slots[0].innerText;
+        const nombreDer = slots[1].innerText;
+        
+        // Actualizamos los títulos de tus botones
+        document.getElementById('titulo-izq').innerText = nombreIzq;
+        document.getElementById('titulo-der').innerText = nombreDer;
+    }
+}

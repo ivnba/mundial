@@ -30,18 +30,27 @@ function actualizarRegalo(nombreRecibido, equipo) {
     }
 }
 function actualizarNombresEquipos() {
-    // Buscamos el partido activo (el que tiene la clase 'active' o el que tengas seleccionado)
-    // Ajusta '.team-slot' según tu estructura real
-    const partidoActivo = document.querySelector('.match-card.active') || document.getElementById('match-o1');
+    // Buscamos el partido que tiene la clase 'active'
+    const partidoActivo = document.querySelector('.match-card.active');
+    
+    // Si no hay partido activo, no hacemos nada
+    if (!partidoActivo) return;
+    
+    // Obtenemos los dos slots de equipos dentro de ese partido
     const slots = partidoActivo.querySelectorAll('.team-slot');
     
     if(slots.length >= 2) {
-        // Obtenemos los nombres (ejemplo: quitando el formato HTML de la bandera)
-        const nombreIzq = slots[0].innerText;
-        const nombreDer = slots[1].innerText;
+        // Obtenemos el texto de los slots (el nombre del país)
+        // Usamos .innerText para obtener solo el texto y .replace para limpiar espacios extra
+        const nombreIzq = slots[0].innerText.trim();
+        const nombreDer = slots[1].innerText.trim();
         
-        // Actualizamos los títulos de tus botones
-        document.getElementById('titulo-izq').innerText = nombreIzq;
-        document.getElementById('titulo-der').innerText = nombreDer;
+        // Actualizamos los títulos de tus botones manuales
+        // Asegúrate de que el ID en tu HTML sea 'titulo-izq' y 'titulo-der'
+        const elIzq = document.getElementById('titulo-izq');
+        const elDer = document.getElementById('titulo-der');
+        
+        if(elIzq) elIzq.innerText = nombreIzq;
+        if(elDer) elDer.innerText = nombreDer;
     }
 }

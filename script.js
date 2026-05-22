@@ -28,4 +28,22 @@ function actualizarRegalo(nombreRecibido, equipo) {
             imgElement.src = rutaImagen.replace('_t1', '_t2');
         }
     }
+// Función para incrementar contadores
+function actualizarContadorRegalo(nombreRegalo, equipo) {
+    const sufijo = equipo === 'Team1' ? 't1' : 't2';
+    
+    // Identificamos el ID según el regalo (ejemplo: 'rose' o 'capy')
+    let idElemento = "";
+    if (nombreRegalo === "Rosa") idElemento = `rose-text-${sufijo}`;
+    else if (nombreRegalo === "Capibara") idElemento = `capy-text-${sufijo}`;
+
+    if (idElemento) {
+        const elementoTexto = document.getElementById(idElemento);
+        let actual = parseInt(elementoTexto.innerText);
+        elementoTexto.innerText = actual + 1;
+        
+        // Efecto visual de flash al recibir regalo
+        elementoTexto.parentElement.classList.add('flash');
+        setTimeout(() => elementoTexto.parentElement.classList.remove('flash'), 200);
+    }
 }

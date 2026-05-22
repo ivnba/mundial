@@ -541,19 +541,21 @@
         <div class="right-panel-actions">
             <div class="panel-box-dark">
                 <button class="btn-action-top btn-pink" style="width:100%; border-radius:8px; margin-bottom:10px;" onclick="resetTableroCompleto()">Reiniciar Tabla</button>
-                <button class="btn-action-top btn-green-pill" style="width:100%; border-radius:8px;">-20 Segundos</button>
-                
-                <div class="gift-section-title left-side">IZQUIERDA (TEAM 1)</div>
+                <button class="btn-action-top btn-green-pill" style="width:100%; border-radius:8px; margin-bottom:15px;">-20 Segundos</button>
 
-<div class="grid-regalos">
-    <button class="btn-gift-trigger" onclick="sumarPuntos('izq', 1)"><img src="assets/regalos/regalo_1_t1.png" class="gift-icon"> +1</button>
-    <button class="btn-gift-trigger" onclick="sumarPuntos('izq', 10)"><img src="assets/regalos/regalo_10_t1.png" class="gift-icon"> +10</button>
-    <button class="btn-gift-trigger" onclick="sumarPuntos('izq', 30)"><img src="assets/regalos/regalo_30_t1.png" class="gift-icon"> +30</button>
-    <button class="btn-gift-trigger" onclick="sumarPuntos('izq', 100)"><img src="assets/regalos/regalo_100_t1.png" class="gift-icon"> +100</button>
-    <button class="btn-gift-trigger" onclick="sumarPuntos('izq', 299)"><img src="assets/regalos/regalo_299_t1.png" class="gift-icon"> +299</button>
-    <button class="btn-gift-trigger" onclick="sumarPuntos('izq', 500)"><img src="assets/regalos/regalo_500_t1.png" class="gift-icon"> +500</button>
-    <button class="btn-gift-trigger" onclick="sumarPuntos('izq', 1000)"><img src="assets/regalos/regalo_1000_t1.png" class="gift-icon"> +1k</button>
-    <button class="btn-gift-trigger" onclick="sumarPuntos('izq', 5000)"><img src="assets/regalos/regalo_5000_t1.png" class="gift-icon"> +5k</button>
+                <div style="display: flex; justify-content: space-between; gap: 5px;">
+                    <div style="flex: 1; text-align: center;">
+                        <div class="gift-section-title left-side">IZQUIERDA</div>
+                        <button class="btn-gift-trigger" onclick="sumarPuntosManual(1, 1)">🌹 +1</button>
+                        <button class="btn-gift-trigger" onclick="sumarPuntosManual(1, 10)">🦦 +10</button>
+                    </div>
+                    <div style="flex: 1; text-align: center;">
+                        <div class="gift-section-title right-side">DERECHA</div>
+                        <button class="btn-gift-trigger" onclick="sumarPuntosManual(2, 1)">🌹 +1</button>
+                        <button class="btn-gift-trigger" onclick="sumarPuntosManual(2, 10)">🦦 +10</button>
+                    </div>
+                </div>
+            </div> </div>
 
 </div>
 

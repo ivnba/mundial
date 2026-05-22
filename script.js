@@ -47,3 +47,31 @@ function actualizarContadorRegalo(nombreRegalo, equipo) {
         setTimeout(() => elementoTexto.parentElement.classList.remove('flash'), 200);
     }
 }
+// Asegúrate de que esta función sea llamada dentro de tu socket.onmessage
+function procesarRegalo(data) {
+    if (data.event === 'gift') {
+        const nombre = data.giftName;
+        const equipo = data.team; // Asegúrate de que TikFinity te pase 'Team1' o 'Team2'
+        
+        // Aquí actualizas los contadores
+        actualizarContadorRegalo(nombre, equipo);
+    }
+}
+
+// Esta es la función que te di antes, asegúrate de que esté cerrada correctamente
+function actualizarContadorRegalo(nombreRegalo, equipo) {
+    const sufijo = equipo === 'Team1' ? 't1' : 't2';
+    const idElemento = `rose-text-${sufijo}`; 
+    
+    const elemento = document.getElementById(idElemento);
+    if (elemento) {
+        let actual = parseInt(elemento.innerText || 0);
+        elemento.innerText = actual + 1;
+    }
+}
+// VARIABLES GLOBALES (Al principio del archivo)
+let timerInterval; 
+let puntosL = 0;
+let puntosR = 0;
+
+// ... el resto de tus funciones ...

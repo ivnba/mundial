@@ -14,12 +14,11 @@ const mapaRegalos = {
     "MoneyBagLarge": "img/regalo_5000_t1.png"
 };
 
-// --- FUNCIONES DE REGALOS ---
+// --- LÓGICA DE REGALOS ---
 function actualizarContadorRegalo(nombreRegalo, equipo) {
     const sufijo = equipo === 'Team1' ? 't1' : 't2';
-    
-    // Identificamos el ID dinámicamente o por nombre
-    let idElemento = `rose-text-${sufijo}`; // Ajusta esto según tus IDs en el HTML
+    // Asegúrate de que los IDs en tu HTML sean 'rose-text-t1' y 'rose-text-t2'
+    const idElemento = `rose-text-${sufijo}`; 
     
     const elemento = document.getElementById(idElemento);
     if (elemento) {
@@ -32,23 +31,24 @@ function actualizarContadorRegalo(nombreRegalo, equipo) {
     }
 }
 
-function procesarRegalo(data) {
+// --- CONEXIÓN A TIKFINITY ---
+// Asegúrate de que este bloque de conexión esté tal cual aquí
+const socket = new WebSocket('ws://localhost:8080');
+
+socket.onmessage = function(event) {
+    const data = JSON.parse(event.data);
+    
+    // Si es un regalo, actualizamos el contador
     if (data.event === 'gift') {
         actualizarContadorRegalo(data.giftName, data.team);
     }
-}
+    
+    // --- AQUÍ VA TU LÓGICA EXISTENTE DE PARTIDOS Y RELOJ ---
+    // (Asegúrate de que tus funciones antiguas como setActiveMatch o startTimer 
+    // sigan debajo de esta línea, dentro del archivo)
+};
 
-// --- AQUÍ VA EL RESTO DE TU LÓGICA ---
-// (Asegúrate de que aquí abajo estén tus funciones de timer, setActiveMatch, etc.)
-// Ejemplo:
+// --- TUS FUNCIONES ANTIGUAS (Pégalas justo aquí abajo) ---
 // function setActiveMatch(id) { ... }
 // function startTimer() { ... }
-
-// --- ASEGÚRATE DE QUE TU SOCKET.ONMESSAGE ESTÉ AQUÍ ---
-/*
-socket.onmessage = function(event) {
-    const data = JSON.parse(event.data);
-    procesarRegalo(data); 
-    // ... el resto de tu lógica de otros eventos
-};
-*/
+// function resetTableroCompleto() { ... }

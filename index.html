@@ -2,35 +2,745 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Mundial TikTok HUD</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Mundial TikTok HUD - Interactivo</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #0b0b0c;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px;
+            overflow-x: hidden;
+        }
+
+        /* --- CONTROL BAR SUPERIOR --- */
+        .top-control-bar {
+            width: 100%;
+            max-width: 1300px;
+            background-color: #16161a;
+            border: 1px solid #232326;
+            border-radius: 25px;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .group-label {
+            color: #7b7b7e;
+            font-size: 10px;
+            text-transform: uppercase;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .input-user {
+            background-color: #000;
+            border: 1px solid #3a3a3c;
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .btn-action-top {
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            color: #fff;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .btn-pink { background-color: #e01e5a; }
+        .btn-purple { background-color: #7928ca; }
+        .btn-cyan-glow { background-color: #00f2fe; color: #000; }
+        .btn-red-pill { background-color: #ff003c; }
+        .btn-green-pill { background-color: #00ff66; color: #000; }
+
+        /* --- CONTENEDOR PRINCIPAL --- */
+        .workspace {
+            display: flex;
+            width: 100%;
+            max-width: 1300px;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        /* HISTORIAL IZQUIERDO */
+        .left-panel-ranking {
+            width: 130px;
+            background-color: #121214;
+            border: 1px solid #222224;
+            border-radius: 16px;
+            padding: 15px 5px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .section-title {
+            color: #00f2fe;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .ranking-node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .circle-flag-frame {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            border: 3px solid #00ffff;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0,255,255,0.4);
+        }
+        .circle-flag-frame img { width: 100%; height: 100%; object-fit: cover; }
+
+        .count-badge {
+            background-color: #ff003c;
+            color: #fff;
+            font-size: 11px;
+            font-weight: bold;
+            padding: 2px 8px;
+            border-radius: 10px;
+            position: absolute;
+            bottom: -6px;
+        }
+
+        /* --- CANVAS CENTRAL DEL TORNEO --- */
+        .canvas-tournament-wrapper {
+            width: 780px;
+            background-color: #111115;
+            border-radius: 20px;
+            border: 2px solid #2a2a2e;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .versus-header-hud {
+            background: linear-gradient(180deg, #0e051a, #05010a);
+            height: 110px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            border-bottom: 2px solid #222226;
+        }
+
+        .fighter-circle-giant {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 4px solid #0099ff;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(0, 153, 255, 0.5);
+        }
+        .fighter-circle-giant.pink-side { border-color: #ff0077; box-shadow: 0 0 15px rgba(255, 0, 119, 0.5); }
+        .fighter-circle-giant img { width: 100%; height: 100%; object-fit: cover; }
+
+        .score-display-big { font-size: 38px; color: #0099ff; font-weight: 900; }
+        .score-display-big.pink-side { color: #ff0077; }
+
+        .hud-clock { font-size: 36px; color: #ffffff; font-weight: bold; letter-spacing: 2px; }
+
+        .energy-bar-track { width: 200px; height: 12px; background-color: #1a1a1a; border: 2px solid #ffffff; border-radius: 12px; overflow: hidden; }
+        .energy-bar-fill { width: 50%; height: 100%; background: linear-gradient(90deg, #00f2fe, #4facfe); }
+
+        /* --- FONDO AZUL DEL CANVAS DEL FIXTURE --- */
+        .canvas-blueprint-bg {
+            background-color: #3b6e8c;
+            height: 560px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .fixture-column { display: flex; flex-direction: column; justify-content: space-around; height: 100%; width: 120px; z-index: 2; }
+        .fixture-column.cuartos { width: 110px; }
+        .fixture-column.semis { width: 110px; }
+
+        /* Estilo idéntico a las cajas de partidos de tu imagen */
+        .match-box-node {
+            background-color: rgba(14, 32, 46, 0.85);
+            border: 2px solid #ffffff;
+            border-radius: 8px;
+            padding: 4px;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        /* Resaltado de selección activa de partido */
+        .match-box-node.active-match {
+            border-color: #ffd700;
+            box-shadow: 0 0 15px #ffd700;
+        }
+
+        /* Reemplaza tu estilo actual de .team-slot con este */
+.team-slot {
+    display: flex;
+    align-items: center;
+    background-color: #152737;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 4px;
+    height: 18px; /* Ajustado de 24px a 18px para ser más pequeño */
+    padding: 0 4px;
+    font-size: 9px; /* Fuente más pequeña para encajar */
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+/* Ajuste específico para el icono de la bandera */
+.mini-flag-icon {
+    width: 14px; /* Ajustado de 20px a 14px */
+    height: 10px; /* Ajustado de 14px a 10px */
+    border-radius: 1px;
+    margin-right: 4px;
+    object-fit: cover;
+}
+
+/* Ajuste del contenedor del partido para que sea más compacto */
+.match-box-node {
+    background-color: rgba(14, 32, 46, 0.85);
+    border: 1px solid #ffffff; /* Borde un poco más fino */
+    border-radius: 4px;
+    padding: 2px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px; /* Menos espacio entre los dos equipos */
+    cursor: pointer;
+    position: relative;
+    width: 60px; /* Tamaño compacto como en tu ejemplo */
+}
+}
+            position: absolute;
+            font-size: 9px;
+            font-weight: bold;
+            color: #ffffff;
+            text-transform: uppercase;
+            width: 100%;
+            text-align: center;
+            top: -14px;
+            left: 0;
+        }
+
+        /* Centro de la Tabla */
+        .center-axis-finals {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            width: 150px;
+        }
+        .grand-final-title { font-size: 14px; font-weight: 900; color: #fff; }
+
+        /* --- PANEL DE REGALOS DERECHO --- */
+        .right-panel-actions { width: 220px; display: flex; flex-direction: column; gap: 10px; }
+        .panel-box-dark { background-color: #121214; border: 1px solid #222224; border-radius: 16px; padding: 12px; }
+
+        .gift-section-title { font-size: 10px; font-weight: bold; margin: 10px 0 5px 0; text-transform: uppercase; }
+        .gift-section-title.left-side { color: #00ff66; }
+        .gift-section-title.right-side { color: #ff0077; }
+
+        .btn-gift-trigger {
+            width: 100%;
+            background-color: #1e1e24;
+            border: 1px solid #2d2d30;
+            color: #fff;
+            font-size: 11px;
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 4px;
+            font-weight: bold;
+        }
+
+        /* --- MODAL FLOTANTE MODERNO SELECCIÓN DE 16 PAÍSES --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(11, 11, 12, 0.95);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .modal-overlay.open { opacity: 1; pointer-events: auto; }
+
+        .modal-title-main { font-size: 26px; font-weight: bold; color: #00f2fe; margin-bottom: 5px; text-transform: uppercase; }
+        .modal-subtitle { font-size: 14px; color: #8a8a8f; margin-bottom: 25px; }
+
+        .flag-selection-grid {
+            display: grid;
+            grid-template-columns: repeat(9, 1fr);
+            gap: 20px;
+            max-width: 1000px;
+            justify-items: center;
+            margin-bottom: 35px;
+        }
+
+        .flag-select-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .flag-select-card:hover { transform: scale(1.1); }
+
+        .flag-circle-item {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            border: 3px solid #444;
+            overflow: hidden;
+            position: relative;
+        }
+        .flag-circle-item img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* Estado seleccionado */
+        .flag-select-card.selected .flag-circle-item {
+            border-color: #00ff66;
+            box-shadow: 0 0 12px #00ff66;
+        }
+
+        .flag-select-card.selected .flag-circle-item::after {
+            content: "✓";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 255, 102, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #fff;
+            font-size: 20px;
+        }
+
+        .flag-name-label { font-size: 10px; color: #fff; text-transform: uppercase; text-align: center; }
+
+        .btn-start-tournament {
+            background-color: #00a86b;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 12px 40px;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            text-transform: uppercase;
+            box-shadow: 0 0 15px rgba(0, 168, 107, 0.4);
+        }
+        .btn-start-tournament:disabled {
+            background-color: #333;
+            color: #777;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+    </style>
 </head>
 <body>
 
     <div class="top-control-bar">
         <div class="control-group">
-            <input type="text" class="input-user" value="chule_sv14">
+            <input type="text" class="input-user" value="chule_sv14" style="width: 110px;">
             <button class="btn-action-top btn-pink">Conectar</button>
         </div>
+        <button class="btn-action-top btn-purple">TikFinity App</button>
         
         <div class="control-group">
-            <select class="input-user" id="select-duration">
+            <select class="input-user" id="select-duration" style="width: 80px;">
                 <option value="60">1 min</option>
                 <option value="120">2 min</option>
             </select>
-            <button id="btn-iniciar" onclick="iniciarPartido()">INICIAR BATTLE</button>
+            <button class="btn-action-top btn-cyan-glow" id="btn-start-clock">Iniciar</button>
         </div>
-        
+        <button class="btn-action-top btn-red-pill">Borrar Récords</button>
         <button class="btn-action-top btn-green-pill" onclick="openSetupModal()">Nueva Ronda</button>
+        <div class="input-user" style="border-color:#00f2fe; color:#00f2fe;">23331 / 25000 Tokens</div>
+    </div>
+
+    <div class="workspace">
+        
+        <div class="left-panel-ranking">
+            <div class="section-title">TOP HISTORICO</div>
+            <div class="ranking-node">
+                <div class="circle-flag-frame"><img src="https://flagcdn.com/w160/sv.png"></div>
+                <div class="count-badge">4</div>
+            </div>
+            <div class="ranking-node">
+                <div class="circle-flag-frame"><img src="https://flagcdn.com/w160/hn.png"></div>
+                <div class="count-badge">4</div>
+            </div>
+            <div class="ranking-node">
+                <div class="circle-flag-frame"><img src="https://flagcdn.com/w160/pa.png"></div>
+                <div class="count-badge">2</div>
+            </div>
+        </div>
+
+        <div class="canvas-tournament-wrapper">
+            <div class="versus-header-hud">
+                <div class="fighter-circle-giant" id="hud-flag-l">
+                    <img src="https://flagcdn.com/w160/ar.png" id="img-hud-l">
+                </div>
+                <div class="score-display-big" id="score-val-l">0</div>
+                
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 5px;">
+                    <div class="hud-clock" id="timer-string">00:00</div>
+                    <div class="energy-bar-track">
+                        <div class="energy-bar-fill" id="energy-bar"></div>
+                    </div>
+                </div>
+                
+                <div class="score-display-big pink-side" id="score-val-r">0</div>
+                <div class="fighter-circle-giant pink-side" id="hud-flag-r">
+                    <img src="https://flagcdn.com/w160/co.png" id="img-hud-r">
+                </div>
+            </div>
+
+            <div class="canvas-blueprint-bg">
+                
+                <div class="fixture-column">
+                    <div class="match-box-node active-match" id="match-o1" onclick="setActiveMatch('match-o1')" data-next="match-q1" data-slot="1">
+                        <div class="stage-indicator">Octavos</div>
+                        <div class="team-slot" data-code="ar"><img class="mini-flag-icon" src="https://flagcdn.com/w20/ar.png"> ARG</div>
+                        <div class="team-slot" data-code="co"><img class="mini-flag-icon" src="https://flagcdn.com/w20/co.png"> COL</div>
+                    </div>
+                    <div class="match-box-node" id="match-o2" onclick="setActiveMatch('match-o2')" data-next="match-q1" data-slot="2">
+                        <div class="team-slot" data-code="ve"><img class="mini-flag-icon" src="https://flagcdn.com/w20/ve.png"> VEN</div>
+                        <div class="team-slot" data-code="mx"><img class="mini-flag-icon" src="https://flagcdn.com/w20/mx.png"> MEX</div>
+                    </div>
+                    <div class="match-box-node" id="match-o3" onclick="setActiveMatch('match-o3')" data-next="match-q2" data-slot="1">
+                        <div class="team-slot" data-code="ec"><img class="mini-flag-icon" src="https://flagcdn.com/w20/ec.png"> ECU</div>
+                        <div class="team-slot" data-code="gt"><img class="mini-flag-icon" src="https://flagcdn.com/w20/gt.png"> GUA</div>
+                    </div>
+                    <div class="match-box-node" id="match-o4" onclick="setActiveMatch('match-o4')" data-next="match-q2" data-slot="2">
+                        <div class="team-slot" data-code="hn"><img class="mini-flag-icon" src="https://flagcdn.com/w20/hn.png"> HON</div>
+                        <div class="team-slot" data-code="cr"><img class="mini-flag-icon" src="https://flagcdn.com/w20/cr.png"> CRI</div>
+                    </div>
+                </div>
+
+                <div class="fixture-column cuartos">
+                    <div class="match-box-node" id="match-q1" onclick="setActiveMatch('match-q1')" data-next="match-s1" data-slot="1">
+                        <div class="stage-indicator">Cuartos</div>
+                        <div class="team-slot empty">...</div>
+                        <div class="team-slot empty">...</div>
+                    </div>
+                    <div class="match-box-node" id="match-q2" onclick="setActiveMatch('match-q2')" data-next="match-s1" data-slot="2">
+                        <div class="team-slot empty">...</div>
+                        <div class="team-slot empty">...</div>
+                    </div>
+                </div>
+
+                <div class="fixture-column semis">
+                    <div class="match-box-node" id="match-s1" onclick="setActiveMatch('match-s1')" data-next="match-final" data-slot="1">
+                        <div class="stage-indicator">Semifinal</div>
+                        <div class="team-slot empty">...</div>
+                        <div class="team-slot empty">...</div>
+                    </div>
+                </div>
+
+                <div class="center-axis-finals">
+                    <div class="grand-final-title">LA FINAL</div>
+                    <div class="match-box-node" id="match-final" onclick="setActiveMatch('match-final')" data-next="podium" style="width: 100px;">
+                        <div class="team-slot empty">?</div>
+                        <div class="team-slot empty">?</div>
+                    </div>
+                </div>
+
+                <div class="fixture-column semis">
+                    <div class="match-box-node" id="match-s2" onclick="setActiveMatch('match-s2')" data-next="match-final" data-slot="2">
+                        <div class="stage-indicator">Semifinal</div>
+                        <div class="team-slot empty">...</div>
+                        <div class="team-slot empty">...</div>
+                    </div>
+                </div>
+
+                <div class="fixture-column cuartos">
+                    <div class="match-box-node" id="match-q3" onclick="setActiveMatch('match-q3')" data-next="match-s2" data-slot="1">
+                        <div class="stage-indicator">Cuartos</div>
+                        <div class="team-slot empty">...</div>
+                        <div class="team-slot empty">...</div>
+                    </div>
+                    <div class="match-box-node" id="match-q4" onclick="setActiveMatch('match-q4')" data-next="match-s2" data-slot="2">
+                        <div class="stage-indicator">Cuartos</div>
+                        <div class="team-slot empty">...</div>
+                        <div class="team-slot empty">...</div>
+                    </div>
+                </div>
+
+                <div class="fixture-column">
+                    <div class="match-box-node" id="match-o5" onclick="setActiveMatch('match-o5')" data-next="match-q3" data-slot="1">
+                        <div class="stage-indicator">Octavos</div>
+                        <div class="team-slot" data-code="pa"><img class="mini-flag-icon" src="https://flagcdn.com/w20/pa.png"> PAN</div>
+                        <div class="team-slot" data-code="ni"><img class="mini-flag-icon" src="https://flagcdn.com/w20/ni.png"> NIC</div>
+                    </div>
+                    <div class="match-box-node" id="match-o6" onclick="setActiveMatch('match-o6')" data-next="match-q3" data-slot="2">
+                        <div class="team-slot" data-code="pr"><img class="mini-flag-icon" src="https://flagcdn.com/w20/pr.png"> PUR</div>
+                        <div class="team-slot" data-code="cu"><img class="mini-flag-icon" src="https://flagcdn.com/w20/cu.png"> CUB</div>
+                    </div>
+                    <div class="match-box-node" id="match-o7" onclick="setActiveMatch('match-o7')" data-next="match-q4" data-slot="1">
+                        <div class="stage-indicator">Octavos</div>
+                        <div class="team-slot" data-code="es"><img class="mini-flag-icon" src="https://flagcdn.com/w20/es.png"> ESP</div>
+                        <div class="team-slot" data-code="pe"><img class="mini-flag-icon" src="https://flagcdn.com/w20/pe.png"> PER</div>
+                    </div>
+                    <div class="match-box-node" id="match-o8" onclick="setActiveMatch('match-o8')" data-next="match-q4" data-slot="2">
+                        <div class="team-slot" data-code="cl"><img class="mini-flag-icon" src="https://flagcdn.com/w20/cl.png"> CHI</div>
+                        <div class="team-slot" data-code="py"><img class="mini-flag-icon" src="https://flagcdn.com/w20/py.png"> PAR</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="right-panel-actions">
+            <div class="panel-box-dark">
+                <button class="btn-action-top btn-pink" style="width:100%; border-radius:8px; margin-bottom:10px;" onclick="resetTableroCompleto()">Reiniciar Tabla</button>
+                <button class="btn-action-top btn-green-pill" style="width:100%; border-radius:8px;">-20 Segundos</button>
+                
+                <div class="gift-section-title left-side">IZQUIERDA (TEAM 1)</div>
+
+<div class="grid-regalos">
+    <button class="btn-gift-trigger" onclick="sumarPuntos('izq', 1)"><img src="assets/regalos/regalo_1_t1.png" class="gift-icon"> +1</button>
+    <button class="btn-gift-trigger" onclick="sumarPuntos('izq', 10)"><img src="assets/regalos/regalo_10_t1.png" class="gift-icon"> +10</button>
+    <button class="btn-gift-trigger" onclick="sumarPuntos('izq', 30)"><img src="assets/regalos/regalo_30_t1.png" class="gift-icon"> +30</button>
+    <button class="btn-gift-trigger" onclick="sumarPuntos('izq', 100)"><img src="assets/regalos/regalo_100_t1.png" class="gift-icon"> +100</button>
+    <button class="btn-gift-trigger" onclick="sumarPuntos('izq', 299)"><img src="assets/regalos/regalo_299_t1.png" class="gift-icon"> +299</button>
+    <button class="btn-gift-trigger" onclick="sumarPuntos('izq', 500)"><img src="assets/regalos/regalo_500_t1.png" class="gift-icon"> +500</button>
+    <button class="btn-gift-trigger" onclick="sumarPuntos('izq', 1000)"><img src="assets/regalos/regalo_1000_t1.png" class="gift-icon"> +1k</button>
+    <button class="btn-gift-trigger" onclick="sumarPuntos('izq', 5000)"><img src="assets/regalos/regalo_5000_t1.png" class="gift-icon"> +5k</button>
+
+</div>
+
+        </div>
     </div>
 
     <div class="modal-overlay" id="modal-setup">
         <div class="modal-title-main">ELIGE 16 PAÍSES</div>
         <div class="modal-subtitle" id="modal-counter-label">Seleccionados: 0 / 16</div>
-        <div class="flag-selection-grid" id="flag-grid-target"></div>
+        
+        <div class="flag-selection-grid" id="flag-grid-target">
+            </div>
+
         <button class="btn-start-tournament" id="btn-submit-tournament" disabled onclick="aplicarNuevaRonda()">Comenzar Torneo</button>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        let puntosL = 0, puntosR = 0;
+        let activeMatchId = "match-o1";
+        let timerInterval = null, tiempoRestante = 60;
+        let seleccionadosGlobales = [];
+
+        // Base de Datos de Países completa con las banderas de tu imagen
+        const poolPaises = [
+            {code:"ar", name:"Argentina"}, {code:"co", name:"Colombia"}, {code:"pe", name:"Perú"},
+            {code:"ve", name:"Venezuela"}, {code:"mx", name:"México"}, {code:"es", name:"España"},
+            {code:"cl", name:"Chile"}, {code:"ec", name:"Ecuador"}, {code:"br", name:"Brasil"},
+            {code:"uy", name:"Uruguay"}, {code:"py", name:"Paraguay"}, {code:"bo", name:"Bolivia"},
+            {code:"cr", name:"Costa Rica"}, {code:"pa", name:"Panamá"}, {code:"hn", name:"Honduras"},
+            {code:"us", name:"USA"}, {code:"sv", name:"El Salvador"}, {code:"gt", name:"Guatemala"},
+            {code:"ni", name:"Nicaragua"}, {code:"do", name:"R. Dominicana"}, {code:"cu", name:"Cuba"},
+            {code:"pr", name:"Puerto Rico"}, {code:"gq", name:"Guinea Ecu."}, {code:"it", name:"Italia"},
+            {code:"fr", name:"Francia"}, {code:"de", name:"Alemania"}, {code:"jp", name:"Japón"}
+        ];
+
+        // Cambiar partido activo manualmente
+        function setActiveMatch(id) {
+            const box = document.getElementById(id);
+            const slots = box.querySelectorAll('.team-slot');
+            if (slots[0].classList.contains('empty') && slots[1].classList.contains('empty')) return;
+
+            document.querySelectorAll('.match-box-node').forEach(el => el.classList.remove('active-match'));
+            box.classList.add('active-match');
+            activeMatchId = id;
+
+            // Resetear Marcadores del HUD
+            puntosL = 0; puntosR = 0;
+            document.getElementById('score-val-l').innerText = 0;
+            document.getElementById('score-val-r').innerText = 0;
+            document.getElementById('energy-bar').style.width = '50%';
+
+            // Actualizar fotos del HUD superior
+            const codeL = slots[0].getAttribute('data-code');
+            const codeR = slots[1].getAttribute('data-code');
+            document.getElementById('img-hud-l').src = codeL ? `https://flagcdn.com/w160/${codeL}.png` : '';
+            document.getElementById('img-hud-r').src = codeR ? `https://flagcdn.com/w160/${codeR}.png` : '';
+        }
+
+        function sumarPuntosManual(lado, cant) {
+            lado === 1 ? puntosL += cant : puntosR += cant;
+            document.getElementById('score-val-l').innerText = puntosL;
+            document.getElementById('score-val-r').innerText = puntosR;
+
+            let total = puntosL + puntosR;
+            document.getElementById('energy-bar').style.width = total === 0 ? '50%' : (puntosL / total * 100) + '%';
+        }
+
+        // Reloj de partida
+        document.getElementById('btn-start-clock').addEventListener('click', function() {
+            clearInterval(timerInterval);
+            tiempoRestante = parseInt(document.getElementById('select-duration').value);
+            timerInterval = setInterval(() => {
+                tiempoRestante--;
+                let min = Math.floor(tiempoRestante / 60).toString().padStart(2, '0');
+                let sec = (tiempoRestante % 60).toString().padStart(2, '0');
+                document.getElementById('timer-string').innerText = `${min}:${sec}`;
+
+                if (tiempoRestante <= 0) {
+                    clearInterval(timerInterval);
+                    avanzarGanadorAutomatico();
+                }
+            }, 1000);
+        });
+
+        // PASAR AUTOMÁTICO AL GANAR
+        function avanzarGanadorAutomatico() {
+            const activeBox = document.getElementById(activeMatchId);
+            const slots = activeBox.querySelectorAll('.team-slot');
+            let ganadorIdx = puntosL >= puntosR ? 0 : 1;
+            
+            let codeG = slots[ganadorIdx].getAttribute('data-code');
+            let textG = slots[ganadorIdx].innerText;
+
+            const nextMatchId = activeBox.getAttribute('data-next');
+            const targetSlot = activeBox.getAttribute('data-slot');
+
+            if (nextMatchId && nextMatchId !== "podium") {
+                const nextBox = document.getElementById(nextMatchId);
+                const targetSlots = nextBox.querySelectorAll('.team-slot');
+                let slotDestino = targetSlots[targetSlot - 1];
+
+                slotDestino.classList.remove('empty');
+                slotDestino.setAttribute('data-code', codeG);
+                slotDestino.innerHTML = `<img class="mini-flag-icon" src="https://flagcdn.com/w20/${codeG}.png"> ${textG}`;
+                
+                // Activar el siguiente partido en la lista automáticamente si está listo
+                setActiveMatch(nextMatchId);
+            } else {
+                alert("🏆 ¡TENEMOS UN CAMPEÓN DEL MUNDIAL!: " + textG);
+            }
+        }
+
+        // CONTROL DE VENTANA NUEVA RONDA
+        function openSetupModal() {
+            seleccionadosGlobales = [];
+            const grid = document.getElementById('flag-grid-target');
+            grid.innerHTML = '';
+            document.getElementById('modal-counter-label').innerText = "Seleccionados: 0 / 16";
+            document.getElementById('btn-submit-tournament').disabled = true;
+
+            poolPaises.forEach(p => {
+                let card = document.createElement('div');
+                card.className = "flag-select-card";
+                card.innerHTML = `
+                    <div class="flag-circle-item"><img src="https://flagcdn.com/w160/${p.code}.png"></div>
+                    <div class="flag-name-label">${p.name.substring(0, 9)}</div>
+                `;
+                card.onclick = () => togglerPaisSelection(card, p);
+                grid.appendChild(card);
+            });
+
+            document.getElementById('modal-setup').classList.add('open');
+        }
+
+        function togglerPaisSelection(elemento, paisObj) {
+            if (elemento.classList.contains('selected')) {
+                elemento.classList.remove('selected');
+                seleccionadosGlobales = seleccionadosGlobales.filter(item => item.code !== paisObj.code);
+            } else {
+                if (seleccionadosGlobales.length >= 16) return;
+                elemento.classList.add('selected');
+                seleccionadosGlobales.push(paisObj);
+            }
+            
+            document.getElementById('modal-counter-label').innerText = `Seleccionados: ${seleccionadosGlobales.length} / 16`;
+            document.getElementById('btn-submit-tournament').disabled = (seleccionadosGlobales.length !== 16);
+        }
+
+        function aplicarNuevaRonda() {
+            const octavosIds = ['match-o1','match-o2','match-o3','match-o4','match-o5','match-o6','match-o7','match-o8'];
+            let indexSel = 0;
+
+            octavosIds.forEach(id => {
+                const box = document.getElementById(id);
+                const slots = box.querySelectorAll('.team-slot');
+
+                // Llenar el primer slot del partido
+                let p1 = seleccionadosGlobales[indexSel++];
+                slots[0].setAttribute('data-code', p1.code);
+                slots[0].innerHTML = `<img class="mini-flag-icon" src="https://flagcdn.com/w20/${p1.code}.png"> ${p1.code.toUpperCase()}`;
+
+                // Llenar el segundo slot del partido
+                let p2 = seleccionadosGlobales[indexSel++];
+                slots[1].setAttribute('data-code', p2.code);
+                slots[1].innerHTML = `<img class="mini-flag-icon" src="https://flagcdn.com/w20/${p2.code}.png"> ${p2.code.toUpperCase()}`;
+            });
+
+            resetTableroCompleto(false);
+            document.getElementById('modal-setup').classList.remove('open');
+            setActiveMatch('match-o1');
+        }
+
+        function resetTableroCompleto(limpiarTodo = true) {
+            puntosL = 0; puntosR = 0;
+            clearInterval(timerInterval);
+            document.getElementById('timer-string').innerText = "00:00";
+            
+            const vaciarFases = ['match-q1', 'match-q2', 'match-q3', 'match-q4', 'match-s1', 'match-s2', 'match-final'];
+            vaciarFases.forEach(id => {
+                const slots = document.getElementById(id).querySelectorAll('.team-slot');
+                slots.forEach(s => {
+                    s.className = "team-slot empty";
+                    s.removeAttribute('data-code');
+                    s.innerText = "...";
+                });
+            });
+        }
+    </script>
 </body>
 </html>

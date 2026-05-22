@@ -1,22 +1,3 @@
-// --- VARIABLES GLOBALES DE ESTADO ---
-let puntosL = 0, puntosR = 0;
-let activeMatchId = "match-o1";
-let timerInterval = null, tiempoRestante = 60;
-let seleccionadosGlobales = [];
-
-// Base de Datos de Países completa con las banderas de tu imagen
-const poolPaises = [
-    {code:"ar", name:"Argentina"}, {code:"co", name:"Colombia"}, {code:"pe", name:"Perú"},
-    {code:"ve", name:"Venezuela"}, {code:"mx", name:"México"}, {code:"es", name:"España"},
-    {code:"cl", name:"Chile"}, {code:"ec", name:"Ecuador"}, {code:"br", name:"Brasil"},
-    {code:"uy", name:"Uruguay"}, {code:"py", name:"Paraguay"}, {code:"bo", name:"Bolivia"},
-    {code:"cr", name:"Costa Rica"}, {code:"pa", name:"Panamá"}, {code:"hn", name:"Honduras"},
-    {code:"us", name:"USA"}, {code:"sv", name:"El Salvador"}, {code:"gt", name:"Guatemala"},
-    {code:"ni", name:"Nicaragua"}, {code:"do", name:"R. Dominicana"}, {code:"cu", name:"Cuba"},
-    {code:"pr", name:"Puerto Rico"}, {code:"gq", name:"Guinea Ecu."}, {code:"it", name:"Italia"},
-    {code:"fr", name:"Francia"}, {code:"de", name:"Alemania"}, {code:"jp", name:"Japón"}
-];
-
 // --- CONFIGURACIÓN DE REGALOS AUTOMÁTICA ---
 const mapaRegalos = {
     "Rosa": "img/regalo_1_t1.png", // Asegúrate de que el nombre coincida con lo que envía TikFinity
@@ -46,25 +27,5 @@ function actualizarRegalo(nombreRecibido, equipo) {
         if (equipo === 'Team2') {
             imgElement.src = rutaImagen.replace('_t1', '_t2');
         }
-    }
-}
-
-// Función para incrementar contadores
-function actualizarContadorRegalo(nombreRegalo, equipo) {
-    const sufijo = equipo === 'Team1' ? 't1' : 't2';
-    
-    // Identificamos el ID según el regalo (ejemplo: 'rose' o 'capy')
-    let idElemento = "";
-    if (nombreRegalo === "Rosa") idElemento = `rose-text-${sufijo}`;
-    else if (nombreRegalo === "Capibara") idElemento = `capy-text-${sufijo}`;
-
-    if (idElemento) {
-        const elementoTexto = document.getElementById(idElemento);
-        let actual = parseInt(elementoTexto.innerText);
-        elementoTexto.innerText = actual + 1;
-        
-        // Efecto visual de flash al recibir regalo
-        elementoTexto.parentElement.classList.add('flash');
-        setTimeout(() => elementoTexto.parentElement.classList.remove('flash'), 200);
     }
 }

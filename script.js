@@ -1,56 +1,70 @@
+// --- VARIABLES GLOBALES DE ESTADO ---
 let puntosL = 0, puntosR = 0;
 let activeMatchId = "match-o1";
-let timerInterval = null;
+let timerInterval = null, tiempoRestante = 60;
+let seleccionadosGlobales = [];
 
-// --- FUNCIONES DE CONTROL ---
+// Base de Datos de Países completa con las banderas de tu imagen
+const poolPaises = [
+    {code:"ar", name:"Argentina"}, {code:"co", name:"Colombia"}, {code:"pe", name:"Perú"},
+    {code:"ve", name:"Venezuela"}, {code:"mx", name:"México"}, {code:"es", name:"España"},
+    {code:"cl", name:"Chile"}, {code:"ec", name:"Ecuador"}, {code:"br", name:"Brasil"},
+    {code:"uy", name:"Uruguay"}, {code:"py", name:"Paraguay"}, {code:"bo", name:"Bolivia"},
+    {code:"cr", name:"Costa Rica"}, {code:"pa", name:"Panamá"}, {code:"hn", name:"Honduras"},
+    {code:"us", name:"USA"}, {code:"sv", name:"El Salvador"}, {code:"gt", name:"Guatemala"},
+    {code:"ni", name:"Nicaragua"}, {code:"do", name:"R. Dominicana"}, {code:"cu", name:"Cuba"},
+    {code:"pr", name:"Puerto Rico"}, {code:"gq", name:"Guinea Ecu."}, {code:"it", name:"Italia"},
+    {code:"fr", name:"Francia"}, {code:"de", name:"Alemania"}, {code:"jp", name:"Japón"}
+];
 
-function iniciarPartido() {
-    console.log("Iniciando batalla...");
-    clearInterval(timerInterval);
-    let duracion = parseInt(document.getElementById('select-duration').value);
+// --- CONFIGURACIÓN DE REGALOS AUTOMÁTICA ---
+const mapaRegalos = {
+    "Rosa": "img/regalo_1_t1.png", // Asegúrate de que el nombre coincida con lo que envía TikFinity
+    "Capibara": "img/regalo_10_t1.png",
+    "Hat": "img/regalo_30_t1.png",
+    "Perfume": "img/regalo_100_t1.png",
+    "AnimalMascot": "img/regalo_500_t1.png",
+    "MoneyBag": "img/regalo_1000_t1.png",
+    "MoneyBagLarge": "img/regalo_5000_t1.png"
+};
+
+// Función conceptual de cómo TikFinity actualiza
+// Necesitas adaptarla a tu escucha de eventos
+function actualizarRegalo(nombreRecibido, equipo) {
+    const sufijoEquipo = equipo === 'Team1' ? 't1' : 't2';
+    const idElemento = `gif-primary-${sufijoEquipo}`;
+    const imgElement = document.getElementById(idElemento);
     
-    timerInterval = setInterval(() => {
-        duracion--;
-        let min = Math.floor(duracion / 60).toString().padStart(2, '0');
-        let sec = (duracion % 60).toString().padStart(2, '0');
-        document.getElementById('timer-string').innerText = `${min}:${sec}`;
-
-        if (duracion <= 0) {
-            clearInterval(timerInterval);
-            alert("¡Tiempo terminado!");
+    // Obtiene la ruta correcta del mapa
+    const rutaImagen = mapaRegalos[nombreRecibido];
+    
+    if (rutaImagen) {
+        // Actualiza la imagen principal
+        imgElement.src = rutaImagen;
+        
+        // (Opcional) Si necesitas la versión t2 para el otro equipo
+        if (equipo === 'Team2') {
+            imgElement.src = rutaImagen.replace('_t1', '_t2');
         }
-    }, 1000);
-}
-
-function sumarPuntos(lado, cant) {
-    if (lado === 'izq') {
-        puntosL += cant;
-        document.getElementById('score-val-l').innerText = puntosL;
-    } else {
-        puntosR += cant;
-        document.getElementById('score-val-r').innerText = puntosR;
     }
+}
+
+// Función para incrementar contadores
+function actualizarContadorRegalo(nombreRegalo, equipo) {
+    const sufijo = equipo === 'Team1' ? 't1' : 't2';
     
-    // Calcular barra
-    let total = puntosL + puntosR;
-    let porcentaje = total === 0 ? 50 : (puntosL / total * 100);
-    document.getElementById('energy-bar').style.width = porcentaje + '%';
-}
+    // Identificamos el ID según el regalo (ejemplo: 'rose' o 'capy')
+    let idElemento = "";
+    if (nombreRegalo === "Rosa") idElemento = `rose-text-${sufijo}`;
+    else if (nombreRegalo === "Capibara") idElemento = `capy-text-${sufijo}`;
 
-function setActiveMatch(id) {
-    activeMatchId = id;
-    document.querySelectorAll('.match-box-node').forEach(el => el.classList.remove('active-match'));
-    document.getElementById(id).classList.add('active-match');
-}
-
-function openSetupModal() {
-    document.getElementById('modal-setup').classList.add('open');
-}
-
-function resetTableroCompleto() {
-    puntosL = 0; puntosR = 0;
-    document.getElementById('score-val-l').innerText = "0";
-    document.getElementById('score-val-r').innerText = "0";
-    document.getElementById('timer-string').innerText = "00:00";
-    clearInterval(timerInterval);
+    if (idElemento) {
+        const elementoTexto = document.getElementById(idElemento);
+        let actual = parseInt(elementoTexto.innerText);
+        elementoTexto.innerText = actual + 1;
+        
+        // Efecto visual de flash al recibir regalo
+        elementoTexto.parentElement.classList.add('flash');
+        setTimeout(() => elementoTexto.parentElement.classList.remove('flash'), 200);
+    }
 }

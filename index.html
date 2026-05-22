@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
     <div class="top-control-bar">
         <div class="control-group">
             <input type="text" class="input-user" value="chule_sv14">
@@ -21,6 +22,13 @@
         </div>
         
         <button class="btn-action-top btn-green-pill" onclick="openSetupModal()">Nueva Ronda</button>
+    </div>
+
+    <div class="modal-overlay" id="modal-setup">
+        <div class="modal-title-main">ELIGE 16 PAÍSES</div>
+        <div class="modal-subtitle" id="modal-counter-label">Seleccionados: 0 / 16</div>
+        <div class="flag-selection-grid" id="flag-grid-target"></div>
+        <button class="btn-start-tournament" id="btn-submit-tournament" disabled onclick="aplicarNuevaRonda()">Comenzar Torneo</button>
     </div>
 
     <script src="script.js"></script>

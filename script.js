@@ -78,3 +78,22 @@ function actualizarNombresEquipos() {
         if(elDer) elDer.innerText = nombreDer;
     }
 }
+const socket = new WebSocket('ws://localhost:8080');
+
+socket.onmessage = function(event) {
+    const data = JSON.parse(event.data);
+
+    // TikFinity envía eventos de tipo 'gift'
+    if (data.type === 'gift') {
+        const regalo = data.giftName; // Ej: "Rosa"
+        const usuario = data.uniqueId; // El nombre del usuario
+        
+        // Aquí definimos la lógica: ¿Para qué lado es?
+        // Nota: TikFinity no sabe el "lado" por defecto, 
+        // normalmente se usa el mensaje del chat para determinarlo.
+        console.log(`Regalo recibido: ${regalo} de ${usuario}`);
+        
+        // Ejemplo: Si el regalo es una Rosa, suma 1 al equipo 1
+        if (regalo === "Rosa") {
+            sumarPuntosManual(1, 1);
+        }

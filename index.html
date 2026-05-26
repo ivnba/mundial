@@ -749,20 +749,26 @@
         }
 
         function resetTableroCompleto(limpiarTodo = true) {
-            puntosL = 0; puntosR = 0;
-            clearInterval(timerInterval);
-            document.getElementById('timer-string').innerText = "00:00";
-            
-            const vaciarFases = ['match-q1', 'match-q2', 'match-q3', 'match-q4', 'match-s1', 'match-s2', 'match-final'];
-            vaciarFases.forEach(id => {
-                const slots = document.getElementById(id).querySelectorAll('.team-slot');
-                slots.forEach(s => {
-                    s.className = "team-slot empty";
-                    s.removeAttribute('data-code');
-                    s.innerText = "...";
-                });
-            });
+            // ... (todo tu código que ya tienes) ...
         }
+
+        // --- AGREGA ESTO AQUÍ ABAJO ---
+        console.log("Iniciando conexión con TikFinity...");
+        
+        const socket = new WebSocket('ws://localhost:21213/');
+        
+        socket.onopen = () => {
+            console.log("¡Conexión abierta con éxito!");
+        };
+        
+        socket.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            console.log("Datos recibidos:", data);
+        };
+        
+        socket.onerror = (error) => {
+            console.error("Error en la conexión:", error);
+        };
+        // -------------------------------
     </script>
 </body>
-</html>

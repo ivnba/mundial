@@ -78,22 +78,42 @@ function actualizarNombresEquipos() {
         if(elDer) elDer.innerText = nombreDer;
     }
 }
-const socket = new WebSocket('ws://localhost:8080');
+const socket = new WebSocket('ws://localhost:8080'); 
 
 socket.onmessage = function(event) {
     const data = JSON.parse(event.data);
+    console.log("Datos recibidos de TikFinity:", data); // Esto es para ver qué llega
 
-    // TikFinity envía eventos de tipo 'gift'
     if (data.type === 'gift') {
-        const regalo = data.giftName; // Ej: "Rosa"
-        const usuario = data.uniqueId; // El nombre del usuario
+        // TikFinity envía el nombre del regalo y el usuario
+        const regalo = data.giftName; 
+        const puntos = data.diamondCount || 30; // Si no trae puntos, le damos 30 por defecto
         
-        // Aquí definimos la lógica: ¿Para qué lado es?
-        // Nota: TikFinity no sabe el "lado" por defecto, 
-        // normalmente se usa el mensaje del chat para determinarlo.
-        console.log(`Regalo recibido: ${regalo} de ${usuario}`);
-        
-        // Ejemplo: Si el regalo es una Rosa, suma 1 al equipo 1
-        if (regalo === "Rosa") {
-            sumarPuntosManual(1, 1);
+        // Aquí le decimos que los regalos siempre suman al "Team1" 
+        // (luego veremos cómo diferenciar si es izq o der)
+        sumarPuntosManual(1, puntos);
         }
+        // Intentar conectar al servidor de TikFinity
+const socket = new WebSocket('ws://localhost:21213/');
+
+socket.onopen = () => {
+    console.log("Conectado a TikFinity con éxito");
+};
+
+socket.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+    
+    // Aquí es donde recibes los eventos (Regalos, likes, etc.)
+    console.log("Evento recibido:", data);
+
+    // Ejemplo: Si el evento es un regalo
+    if (data.event === "gift") {
+        // Aquí llamas a tu función para sumar puntos o goles
+        // Ejemplo: sumarGol(data.data.giftName);
+    }
+};
+
+socket.onclose = () => {
+    console.log("Desconectado de TikFinity. Reintentando en 5 segundos...");
+    setTimeout(() => location.reload(), 5000); // Recarga para reintentar
+};

@@ -78,57 +78,27 @@ function actualizarNombresEquipos() {
         if(elDer) elDer.innerText = nombreDer;
     }
 }
-const socket = new WebSocket('ws://localhost:8080'); 
-
-socket.onmessage = function(event) {
-    const data = JSON.parse(event.data);
-    console.log("Datos recibidos de TikFinity:", data); // Esto es para ver qué llega
-
-    if (data.type === 'gift') {
-        // TikFinity envía el nombre del regalo y el usuario
-        const regalo = data.giftName; 
-        const puntos = data.diamondCount || 30; // Si no trae puntos, le damos 30 por defecto
-        
-        // Aquí le decimos que los regalos siempre suman al "Team1" 
-        // (luego veremos cómo diferenciar si es izq o der)
-        sumarPuntosManual(1, puntos);
-        }
-        // Intentar conectar al servidor de TikFinity
+// Conexión única y limpia a TikFinity
 const socket = new WebSocket('ws://localhost:21213/');
 
 socket.onopen = () => {
-    console.log("Conectado a TikFinity con éxito");
+    console.log("¡Conexión establecida con éxito!");
 };
 
 socket.onmessage = (event) => {
     const data = JSON.parse(event.data);
     
-    // Aquí es donde recibes los eventos (Regalos, likes, etc.)
+    // 1. Mostramos todo lo que llega para que siempre puedas ver qué está pasando
     console.log("Evento recibido:", data);
 
-    // Ejemplo: Si el evento es un regalo
+    // 2. Lógica para procesar regalos
     if (data.event === "gift") {
-        // Aquí llamas a tu función para sumar puntos o goles
-        // Ejemplo: sumarGol(data.data.giftName);
+        const nombreRegalo = data.data.giftName; 
+        console.log("Regalo detectado:", nombreRegalo);
+        
+        // 3. Llamamos a tu función para actualizar la imagen/puntos
+        // Esto automáticamente usará tu mapaRegalos y actualizará la UI
+        actualizarRegalo(nombreRegalo, 'Team1'); 
     }
 };
 
-socket.onclose = () => {
-    console.log("Desconectado de TikFinity. Reintentando en 5 segundos...");
-    setTimeout(() => location.reload(), 5000); // Recarga para reintentar
-};
-console.log("Intentando conectar con TikFinity...");
-
-const socket = new WebSocket('ws://localhost:21213/');
-
-socket.onopen = function(e) {
-  console.log("¡Conexión establecida con éxito!");
-};
-
-socket.onmessage = function(event) {
-  console.log("Datos recibidos:", event.data);
-};
-
-socket.onerror = function(error) {
-  console.log("Error de conexión:", error);
-};

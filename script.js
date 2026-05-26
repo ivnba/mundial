@@ -117,3 +117,18 @@ socket.onclose = () => {
     console.log("Desconectado de TikFinity. Reintentando en 5 segundos...");
     setTimeout(() => location.reload(), 5000); // Recarga para reintentar
 };
+console.log("Intentando conectar con TikFinity...");
+
+const socket = new WebSocket('ws://localhost:21213/');
+
+socket.onopen = function(e) {
+  console.log("¡Conexión establecida con éxito!");
+};
+
+socket.onmessage = function(event) {
+  console.log("Datos recibidos:", event.data);
+};
+
+socket.onerror = function(error) {
+  console.log("Error de conexión:", error);
+};

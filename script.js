@@ -121,19 +121,27 @@ socket.onmessage = (event) => {
         }
 
     function sumarPuntos(idRegalo, equipo) {
-        const puntos = valoresRegalos[idRegalo] || 0;
+    const puntos = valoresRegalos[idRegalo] || 0;
+    const lado = equipo === 'Team1' ? 'l' : 'r';
+    
+    // Vamos a buscar el elemento de una forma más abierta
+    // Buscamos cualquier elemento que tenga 'score-val-' y 'l' o 'r' en su ID
+    const selector = `[id*="score-val-${lado}"]`;
+    const marcador = document.querySelector(selector);
+    
+    if (marcador) {
+        // Obtenemos el texto y limpiamos todo lo que no sea número
+        let texto = marcador.innerText;
+        let puntosActuales = parseInt(texto.replace(/[^0-9]/g, '')) || 0;
         
-        // Traducimos Team1 a 'l' (izquierda) y Team2 a 'r' (derecha) para que coincida con tu HTML
-        const lado = equipo === 'Team1' ? 'l' : 'r';
-        const idMarcador = `score-val-${lado}`;
+        let nuevoTotal = puntosActuales + puntos;
+        marcador.innerText = nuevoTotal;
         
-        const marcador = document.getElementById(idMarcador);
-        
-        if (marcador) {
-            let puntosActuales = parseInt(marcador.innerText.replace(/[^0-9]/g, '')) || 0;
-            marcador.innerText = puntosActuales + puntos;
-            console.log(`Sumados ${puntos} al lado ${lado}. Total: ${puntosActuales + puntos}`);
-        } else {
-            console.log(`Error: No se encontró el marcador con ID ${idMarcador}`);
-        }
+        console.log(`✅ ÉXITO: Sumados ${puntos} al ${lado}. Total: ${nuevoTotal}`);
+    } else {
+        console.error(`❌ ERROR: No se encontró ningún elemento con ID que contenga 'score-val-${lado}'`);
+        // Debug extra: mostramos todos los IDs que existen en la página
+        const todosLosIds = Array.from(document.querySelectorAll('[id]')).map(el => el.id);
+        console.log("IDs disponibles en tu HTML:", todosLosIds);
     }
+}

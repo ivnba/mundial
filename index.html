@@ -647,7 +647,7 @@
 
         // Reloj de partida
         document.getElementById('btn-start-clock').addEventListener('click', function() {
-            clearInterval(timerInterval);
+            clearInterval(window.timerInterval);
             tiempoRestante = parseInt(document.getElementById('select-duration').value);
             timerInterval = setInterval(() => {
                 tiempoRestante--;

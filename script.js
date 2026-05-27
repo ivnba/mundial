@@ -8,113 +8,82 @@ const valoresRegalos = {
     "5269": 1, "8913": 10, "5879": 30, "6427": 100, "7168": 500
 };
 
-// Al inicio de tu script.js
 window.puntosL = 0;
 window.puntosR = 0;
+window.matchActivo = 'match-o1'; 
 
 // --- LÓGICA DEL BOTÓN Y RELOJ ---
 document.addEventListener('DOMContentLoaded', () => {
     const btnStart = document.getElementById('btn-start-clock');
+    
     if (btnStart) {
         btnStart.addEventListener('click', function() {
-            console.log("Botón iniciado"); // Si ves esto en F12, ya funciona el clic
+            console.log("Botón iniciado");
             clearInterval(window.timerInterval);
             
             let tiempoRestante = parseInt(document.getElementById('select-duration').value);
             
-            // Reiniciar HUD
             window.puntosL = 0; window.puntosR = 0;
             document.getElementById('score-val-l').innerText = "0";
             document.getElementById('score-val-r').innerText = "0";
 
-           // ... dentro de tu script.js, en la lógica del botón iniciar ...
-window.timerInterval = setInterval(() => {
-    // ... dentro de tu setInterval en script.js
-if (tiempoRestante <= 0) {
-    clearInterval(window.timerInterval);
-    
-    // AQUÍ ESTÁ EL CAMBIO:
-    // Asegúrate de que window.matchActivo exista. 
-    // Si no está definido, el código no sabrá qué partido terminó.
-    if (window.matchActivo) {
-        window.avanzarGanadorAutomatico(); 
-    } else {
-        console.warn("No se ha definido qué partido terminó (matchActivo es nulo)");
-    }
-}
+            window.timerInterval = setInterval(() => {
+                tiempoRestante--;
+                
+                if (tiempoRestante <= 0) {
+                    clearInterval(window.timerInterval);
+                    if (window.matchActivo) {
+                        // Determinar ganador
+                        let ganador = (window.puntosL > window.puntosR) ? "EQUIPO L" : "EQUIPO R";
+                        avanzarGanador(window.matchActivo, ganador);
+                    } else {
+                        console.warn("No se ha definido qué partido terminó");
+                    }
+                }
+            }, 1000);
         });
     }
-});
 
-// --- LÓGICA DE REGALOS ---
-window.sumarPuntosManual = function(lado, puntos) {
-    if (lado === "t1") {
-        window.puntosL = (window.puntosL || 0) + puntos;
-        document.getElementById('score-val-l').innerText = window.puntosL;
-    } else {
-        window.puntosR = (window.puntosR || 0) + puntos;
-        document.getElementById('score-val-r').innerText = window.puntosR;
-    }
-    // ... resto del código de la barra ...
-};
-    }
-
-    let total = window.puntosL + window.puntosR;
-    if (barra) barra.style.width = total === 0 ? '50%' : (window.puntosL / total * 100) + '%';
-};
-
-// --- WEBSOCKET ---
-const socket = new WebSocket('ws://localhost:21213/');
-socket.onmessage = function(event) {
-    const data = JSON.parse(event.data);
-    if (data.event === "gift") {
-        const id = data.data.giftId.toString();
-        if (mapaRegalos.hasOwnProperty(id)) {
-            window.sumarPuntosManual(mapaRegalos[id] === "t1" ? 1 : 2, valoresRegalos[id]);
+    // --- LÓGICA DE REGALOS ---
+    window.sumarPuntosManual = function(lado, puntos) {
+        if (lado === 1) {
+            window.puntosL += puntos;
+            document.getElementById('score-val-l').innerText = window.puntosL;
+        } else {
+            window.puntosR += puntos;
+            document.getElementById('score-val-r').innerText = window.puntosR;
         }
-    }
-};
-// --- FUNCIÓN PARA AVANZAR AL GANADOR ---
-window.avanzarGanadorAutomatico = function() {
-    // 1. Obtenemos el ID del partido que se jugó
-    const idPartidoActual = window.matchActivo; // Asegúrate de definir esta variable al iniciar
-    const partidoActual = document.getElementById(idPartidoActual);
-    
-    if (!partidoActual) {
-        console.error("No se encontró el partido activo.");
-        return;
-    }
+    };
 
-    const slots = partidoActual.querySelectorAll('.team-slot');
-    
-    // 2. Determinamos quién ganó comparando los puntos globales que ya tienes en el script
-    const ganadorIdx = (window.puntosL > window.puntosR) ? 0 : 1;
-    const ganadorCode = slots[ganadorIdx].getAttribute('data-code');
-    const ganadorHTML = slots[ganadorIdx].innerHTML;
-
-    // 3. Leemos el 'data-next' del HTML (el destino del ganador)
-    const siguienteId = partidoActual.getAttribute('data-next');
-    
-    if (siguienteId) {
-        const sigPartido = document.getElementById(siguienteId);
-        const sigSlots = sigPartido.querySelectorAll('.team-slot');
-        
-        // Buscamos el primer lugar vacío en el siguiente partido
-        for (let slot of sigSlots) {
-            if (!slot.getAttribute('data-code')) {
-                slot.setAttribute('data-code', ganadorCode);
-                slot.innerHTML = ganadorHTML;
-                break;
+    // --- WEBSOCKET ---
+    const socket = new WebSocket('ws://localhost:21213/');
+    socket.onmessage = function(event) {
+        const data = JSON.parse(event.data);
+        if (data.event === "gift") {
+            const id = data.data.giftId.toString();
+            if (mapaRegalos.hasOwnProperty(id)) {
+                const lado = (mapaRegalos[id] === "t1" ? 1 : 2);
+                window.sumarPuntosManual(lado, valoresRegalos[id]);
             }
         }
-        console.log("Ganador avanzado a " + siguienteId + ": " + ganadorCode);
-    } else {
-        console.log("Este partido no tiene un 'data-next' definido.");
-    }
+    };
+}); // Cierra el DOMContentLoaded correctamente
+
+// --- FUNCIÓN DE AVANCE (Fuera del evento para ser global) ---
+function avanzarGanador(matchActualID, equipoGanador) {
+    const matchActual = document.getElementById(matchActualID);
+    if (!matchActual) return;
     
-    // 4. Resetear marcadores
-    window.puntosL = 0;
-    window.puntosR = 0;
-    document.getElementById('score-val-l').innerText = "0";
-    document.getElementById('score-val-r').innerText = "0";
-};
+    const siguienteMatchID = matchActual.getAttribute('data-next');
+    
+    if (siguienteMatchID && siguienteMatchID !== 'final') {
+        const siguienteMatch = document.getElementById(siguienteMatchID);
+        const slotsVacios = siguienteMatch.querySelectorAll('.team-slot.empty');
+        
+        if (slotsVacios.length > 0) {
+            slotsVacios[0].innerText = equipoGanador;
+            slotsVacios[0].classList.remove('empty');
+            console.log("Ganador avanzado a:", siguienteMatchID);
+        }
+    }
+}

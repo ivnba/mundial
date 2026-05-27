@@ -19,21 +19,17 @@ socket.onmessage = function(event) {
                 actualizarMarcador(mapaRegalos[giftId], valoresRegalos[giftId]);
             }
         }
-    } catch (e) { console.error(e); }
+    } catch (e) { console.error("Error al procesar:", e); }
 };
 
 function actualizarMarcador(lado, puntos) {
-    const scoreId = lado === "t1" ? 'score-val-l' : 'score-val-r';
-    const scoreElement = document.getElementById(scoreId);
-    
     if (lado === "t1") {
         window.puntosL = (window.puntosL || 0) + puntos;
-        scoreElement.innerText = window.puntosL;
+        document.getElementById('score-val-l').innerText = window.puntosL;
     } else {
         window.puntosR = (window.puntosR || 0) + puntos;
-        scoreElement.innerText = window.puntosR;
+        document.getElementById('score-val-r').innerText = window.puntosR;
     }
-    
     const total = (window.puntosL || 0) + (window.puntosR || 0);
     const barra = document.getElementById('energy-bar');
     if (total > 0) barra.style.width = ((window.puntosL || 0) / total * 100) + '%';

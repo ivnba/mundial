@@ -593,10 +593,11 @@
     </div>
 
     <script>
-        let puntosL = 0, puntosR = 0;
-        let activeMatchId = "match-o1";
-        let timerInterval = null, tiempoRestante = 60;
-        let seleccionadosGlobales = [];
+    // Variables globales para que el script.js pueda verlas
+    window.puntosL = 0;
+    window.puntosR = 0;
+</script>
+<script src="./script.js" defer></script>
 
         // Base de Datos de Países completa con las banderas de tu imagen
         const poolPaises = [

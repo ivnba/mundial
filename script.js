@@ -15,38 +15,42 @@ window.matchActivo = 'match-o1';
 // Variable global fuera de todo
 let tiempoRestante = 0; 
 
-// 1. Obtén el botón del HTML usando su ID correcto
-const btnIniciar = document.getElementById('btn-start-clock');
-
-// 2. Agrega el escuchador de eventos al botón
-btnIniciar.addEventListener('click', () => {
+// Espera a que el HTML esté completamente cargado antes de buscar los IDs
+document.addEventListener('DOMContentLoaded', () => {
     
-    // Si ya existe un cronómetro corriendo, lo detenemos antes de empezar uno nuevo
-    if (window.timerInterval) clearInterval(window.timerInterval);
-
-    // Obtenemos el tiempo seleccionado del <select> (id="select-duration")
-    let tiempoRestante = parseInt(document.getElementById('select-duration').value);
-    
-    // Obtenemos el contenedor donde mostrar el texto (id="timer-string")
+    const btnIniciar = document.getElementById('btn-start-clock');
     const display = document.getElementById('timer-string');
+    const select = document.getElementById('select-duration');
 
-    // 3. Iniciamos el intervalo
-    window.timerInterval = setInterval(() => {
-        tiempoRestante--;
+    // Verificación de seguridad: si alguno no existe, avisa en consola
+    if (!btnIniciar) console.error("No encontré el botón 'btn-start-clock'");
+    if (!display) console.error("No encontré el ID 'timer-string'");
 
-        // Cálculos de minutos y segundos
-        let mins = Math.floor(tiempoRestante / 60);
-        let secs = tiempoRestante % 60;
+    btnIniciar.addEventListener('click', () => {
+        console.log("Iniciando cronómetro...");
 
-        // Actualizamos el texto en el HTML
-        display.innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        // 1. Limpia cualquier intervalo anterior para evitar que se aceleren
+        if (window.miIntervalo) clearInterval(window.miIntervalo);
 
-        // Condición de fin
-        if (tiempoRestante <= 0) {
-            clearInterval(window.timerInterval);
-            alert("¡Tiempo terminado!");
-        }
-    }, 1000);
+        // 2. Obtiene el valor
+        let tiempoRestante = parseInt(select.value);
+
+        // 3. Ejecuta el conteo
+        window.miIntervalo = setInterval(() => {
+            if (tiempoRestante <= 0) {
+                clearInterval(window.miIntervalo);
+                display.innerText = "00:00";
+                alert("¡Tiempo terminado!");
+            } else {
+                tiempoRestante--;
+                let m = Math.floor(tiempoRestante / 60);
+                let s = tiempoRestante % 60;
+                
+                // Actualiza el ID que me indicaste
+                display.innerText = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+            }
+        }, 1000);
+    });
 });
 
     // --- LÓGICA DE REGALOS ---

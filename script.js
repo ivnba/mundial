@@ -1,12 +1,15 @@
 // --- CONFIGURACIÓN DE REGALOS AUTOMÁTICA ---
 const mapaRegalos = {
-    "Rosa": "img/regalo_1_t1.png", // Asegúrate de que el nombre coincida con lo que envía TikFinity
-    "Capibara": "img/regalo_10_t1.png",
-    "Hat": "img/regalo_30_t1.png",
-    "Perfume": "img/regalo_100_t1.png",
-    "AnimalMascot": "img/regalo_500_t1.png",
-    "MoneyBag": "img/regalo_1000_t1.png",
-    "MoneyBagLarge": "img/regalo_5000_t1.png"
+    "5655": "assets/regalos/regalo_1_t1.png",
+    "9947": "assets/regalos/regalo_10_t1.png",
+    "17490": "assets/regalos/regalo_30_t1.png",
+    "6968": "assets/regalos/regalo_100_t1.png",
+    "11583": "assets/regalos/regalo_500_t1.png", // Nueva línea agregada
+    "5269": "assets/regalos/regalo_1_t2.png",
+    "8913": "assets/regalos/regalo_10_t2.png",
+    "5879": "assets/regalos/regalo_30_ t2.png",
+    "6427": "assets/regalos/regalo_100_ t2.png",
+    "7168": "assets/regalos/regalo_500_t2.png"
 };
 
 // Función conceptual de cómo TikFinity actualiza
@@ -92,13 +95,22 @@ socket.onmessage = (event) => {
     console.log("Evento recibido:", data);
 
     // 2. Lógica para procesar regalos
-    if (data.event === "gift") {
-        const nombreRegalo = data.data.giftName; 
-        console.log("Regalo detectado:", nombreRegalo);
-        
-        // 3. Llamamos a tu función para actualizar la imagen/puntos
-        // Esto automáticamente usará tu mapaRegalos y actualizará la UI
-        actualizarRegalo(nombreRegalo, 'Team1'); 
-    }
-};
+        if (data.event === "gift") {
+            const idRegalo = data.data.giftId.toString();
+            console.log("ID de regalo detectado:", idRegalo);
+
+            // Verificamos si el regalo existe en tu mapa
+            if (mapaRegalos[idRegalo]) {
+                const rutaImagen = mapaRegalos[idRegalo];
+                
+                // Detectamos automáticamente si el archivo es t1 o t2
+                const esTeam1 = rutaImagen.includes('_t1.png');
+                const equipo = esTeam1 ? 'Team1' : 'Team2';
+                
+                console.log(`Regalo ${idRegalo} procesado para: ${equipo}`);
+                
+                // 3. Llamamos a tu función con el equipo detectado automáticamente
+                actualizarRegalo(idRegalo, equipo);
+            }
+        }
 

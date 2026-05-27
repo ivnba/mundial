@@ -751,24 +751,5 @@
         function resetTableroCompleto(limpiarTodo = true) {
             // ... (todo tu código que ya tienes) ...
         }
-
-        // --- AGREGA ESTO AQUÍ ABAJO ---
-        console.log("Iniciando conexión con TikFinity...");
-        
-        const socket = new WebSocket('ws://localhost:21213/');
-        
-        socket.onopen = () => {
-            console.log("¡Conexión abierta con éxito!");
-        };
-        
-        socket.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-            console.log("Datos recibidos:", data);
-        };
-        
-        socket.onerror = (error) => {
-            console.error("Error en la conexión:", error);
-        };
-        // -------------------------------
     </script>
 </body>

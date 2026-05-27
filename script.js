@@ -29,16 +29,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
            // ... dentro de tu script.js, en la lógica del botón iniciar ...
 window.timerInterval = setInterval(() => {
-    // ... dentro de tu setInterval en script.js ...
+    // ... dentro de tu setInterval en script.js
 if (tiempoRestante <= 0) {
     clearInterval(window.timerInterval);
-    alert("¡Tiempo terminado! Calculando ganador...");
-
-    // Usamos 'window' para acceder a la función que está en index.html
-    if (typeof window.avanzarGanadorAutomatico === 'function') {
-        window.avanzarGanadorAutomatico();
+    
+    // AQUÍ ESTÁ EL CAMBIO:
+    // Asegúrate de que window.matchActivo exista. 
+    // Si no está definido, el código no sabrá qué partido terminó.
+    if (window.matchActivo) {
+        window.avanzarGanadorAutomatico(); 
     } else {
-        console.error("No se encuentra la función avanzarGanadorAutomatico");
+        console.warn("No se ha definido qué partido terminó (matchActivo es nulo)");
     }
 }
         });
@@ -72,4 +73,48 @@ socket.onmessage = function(event) {
             window.sumarPuntosManual(mapaRegalos[id] === "t1" ? 1 : 2, valoresRegalos[id]);
         }
     }
+};
+// --- FUNCIÓN PARA AVANZAR AL GANADOR ---
+window.avanzarGanadorAutomatico = function() {
+    // 1. Obtenemos el ID del partido que se jugó
+    const idPartidoActual = window.matchActivo; // Asegúrate de definir esta variable al iniciar
+    const partidoActual = document.getElementById(idPartidoActual);
+    
+    if (!partidoActual) {
+        console.error("No se encontró el partido activo.");
+        return;
+    }
+
+    const slots = partidoActual.querySelectorAll('.team-slot');
+    
+    // 2. Determinamos quién ganó comparando los puntos globales que ya tienes en el script
+    const ganadorIdx = (window.puntosL > window.puntosR) ? 0 : 1;
+    const ganadorCode = slots[ganadorIdx].getAttribute('data-code');
+    const ganadorHTML = slots[ganadorIdx].innerHTML;
+
+    // 3. Leemos el 'data-next' del HTML (el destino del ganador)
+    const siguienteId = partidoActual.getAttribute('data-next');
+    
+    if (siguienteId) {
+        const sigPartido = document.getElementById(siguienteId);
+        const sigSlots = sigPartido.querySelectorAll('.team-slot');
+        
+        // Buscamos el primer lugar vacío en el siguiente partido
+        for (let slot of sigSlots) {
+            if (!slot.getAttribute('data-code')) {
+                slot.setAttribute('data-code', ganadorCode);
+                slot.innerHTML = ganadorHTML;
+                break;
+            }
+        }
+        console.log("Ganador avanzado a " + siguienteId + ": " + ganadorCode);
+    } else {
+        console.log("Este partido no tiene un 'data-next' definido.");
+    }
+    
+    // 4. Resetear marcadores
+    window.puntosL = 0;
+    window.puntosR = 0;
+    document.getElementById('score-val-l').innerText = "0";
+    document.getElementById('score-val-r').innerText = "0";
 };

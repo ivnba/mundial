@@ -85,53 +85,39 @@ function actualizarNombresEquipos() {
         if(elDer) elDer.innerText = nombreDer;
     }
 }
-// Conexión única y limpia a TikFinity
-const socket = new WebSocket('ws://localhost:21213/');
+// --- CONEXIÓN A TIKFINITY ---
+document.addEventListener("DOMContentLoaded", function() {
+    console.log("Intentando conectar con TikFinity...");
+    const socket = new WebSocket('ws://localhost:21213/');
 
-socket.onopen = () => {
-    console.log("¡Conexión establecida con éxito!");
-};
+    socket.onopen = function() {
+        console.log("✅ Conexión establecida.");
+    };
 
-socket.onmessage = (event) => {
-    const data = JSON.parse(event.data);
-    
-    // 1. Mostramos todo lo que llega para que siempre puedas ver qué está pasando
-    console.log("Evento recibido:", data);
-
-// 2. Lógica para procesar regalos
+    socket.onmessage = function(event) {
+        const data = JSON.parse(event.data);
         if (data.event === "gift") {
             const idRegalo = data.data.giftId.toString();
-            console.log("ID recibido:", idRegalo);
-
-            // 1. Verificamos si existe en el mapa
             if (mapaRegalos.hasOwnProperty(idRegalo)) {
-                const rutaImagen = mapaRegalos[idRegalo];
-                
-                // 2. Detección automática de equipo
-                const equipo = rutaImagen.includes('_t1') ? 'Team1' : 'Team2';
-                
-                console.log("Equipo detectado para el regalo:", equipo);
-
-                // 3. Acciones
-                actualizarRegalo(idRegalo, equipo);
-                sumarPuntos(idRegalo, equipo);
-            } else {
-                console.warn("El ID de regalo recibido NO está en mapaRegalos:", idRegalo);
+                const equipo = mapaRegalos[idRegalo].includes('_t1') ? 'Team1' : 'Team2';
+                // Usamos un pequeño retraso para asegurar que las funciones del HTML ya existan
+                setTimeout(() => sumarPuntos(idRegalo, equipo), 100);
             }
         }
+    };
 
-  function sumarPuntos(idRegalo, equipo) {
+    socket.onerror = function(e) { console.error("Error en WebSocket:", e); };
+});
+
+// --- LÓGICA DE SUMA ---
+function sumarPuntos(idRegalo, equipo) {
     const puntos = valoresRegalos[idRegalo] || 0;
-    
-    // 1. Determina el lado: 1 para izquierda, 2 para derecha
     const lado = equipo === 'Team1' ? 1 : 2;
     
-    console.log(`Llamando a la función manual con lado=${lado} y puntos=${puntos}`);
-    
-    // 2. Usamos tu función original que ya sabemos que funciona
-   if (typeof sumarPuntosManual === 'function') {
+    // Verificamos si la función existe antes de llamarla
+    if (typeof window.sumarPuntosManual !== 'undefined') {
         sumarPuntosManual(lado, puntos);
     } else {
-        console.error("Error: sumarPuntosManual no está definida.");
+        console.warn("La función sumarPuntosManual aún no está disponible.");
     }
 }

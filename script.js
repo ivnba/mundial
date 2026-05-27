@@ -11,6 +11,10 @@ const mapaRegalos = {
     "6427": "assets/regalos/regalo_100_ t2.png",
     "7168": "assets/regalos/regalo_500_t2.png"
 };
+const valoresRegalos = {
+    "5655": 1, "9947": 10, "17490": 30, "6968": 100, "11583": 500, // Team 1
+    "5269": 1, "8913": 10, "5879": 30, "6427": 100, "7168": 500    // Team 2
+};
 
 // Función conceptual de cómo TikFinity actualiza
 // Necesitas adaptarla a tu escucha de eventos
@@ -107,10 +111,28 @@ socket.onmessage = (event) => {
                 const esTeam1 = rutaImagen.includes('_t1.png');
                 const equipo = esTeam1 ? 'Team1' : 'Team2';
                 
-                console.log(`Regalo ${idRegalo} procesado para: ${equipo}`);
-                
-                // 3. Llamamos a tu función con el equipo detectado automáticamente
-                actualizarRegalo(idRegalo, equipo);
+                // ... dentro de tu socket.onmessage, donde ya tienes el equipo detectado:
+console.log(`Regalo ${idRegalo} procesado para: ${equipo}`);
+
+// 3. Actualizamos la imagen
+actualizarRegalo(idRegalo, equipo);
+
+// 4. NUEVO: Sumamos los puntos al equipo correspondiente
+sumarPuntos(idRegalo, equipo);
             }
         }
 
+function sumarPuntos(idRegalo, equipo) {
+    const puntos = valoresRegalos[idRegalo] || 0;
+    
+    // Asumiendo que tus marcadores en HTML tienen IDs como 'score-Team1' y 'score-Team2'
+    const marcador = document.getElementById(`score-${equipo}`);
+    
+    if (marcador) {
+        let puntosActuales = parseInt(marcador.innerText) || 0;
+        marcador.innerText = puntosActuales + puntos;
+        console.log(`Sumados ${puntos} puntos al ${equipo}. Total: ${puntosActuales + puntos}`);
+    } else {
+        console.log(`Error: No se encontró el marcador con ID score-${equipo}`);
+    }
+}

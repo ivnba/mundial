@@ -129,9 +129,9 @@ socket.onmessage = (event) => {
     console.log(`Llamando a la función manual con lado=${lado} y puntos=${puntos}`);
     
     // 2. Usamos tu función original que ya sabemos que funciona
-    if (typeof sumarPuntosManual === 'function') {
+   if (typeof sumarPuntosManual === 'function') {
         sumarPuntosManual(lado, puntos);
     } else {
-        console.error("Error: La función sumarPuntosManual no existe.");
+        console.error("Error: sumarPuntosManual no está definida.");
     }
 }

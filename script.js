@@ -12,28 +12,44 @@ window.puntosL = 0;
 window.puntosR = 0;
 window.matchActivo = 'match-o1'; 
 
-// --- LÓGICA DEL BOTÓN Y RELOJ ---
+// 1. DECLARA ESTA VARIABLE FUERA DEL EVENTO
+let tiempoRestante = 0; 
+
 document.addEventListener('DOMContentLoaded', () => {
     const btnStart = document.getElementById('btn-start-clock');
-    
+
     if (btnStart) {
         btnStart.addEventListener('click', function() {
             console.log("Botón iniciado");
             clearInterval(window.timerInterval);
-            
-            let tiempoRestante = parseInt(document.getElementById('select-duration').value);
-            
-            window.puntosL = 0; window.puntosR = 0;
+
+            // 2. ASIGNA EL VALOR A LA VARIABLE GLOBAL
+            tiempoRestante = parseInt(document.getElementById('select-duration').value);
+
+            window.puntosL = 0; 
+            window.puntosR = 0;
             document.getElementById('score-val-l').innerText = "0";
             document.getElementById('score-val-r').innerText = "0";
 
+            // 3. INICIA EL INTERVALO
             window.timerInterval = setInterval(() => {
-                tiempoRestante--;
-                
+                // ... dentro de tu setInterval ...
+tiempoRestante--;
+
+// CALCULA MINUTOS Y SEGUNDOS
+let mins = Math.floor(tiempoRestante / 60);
+let secs = tiempoRestante % 60;
+
+// AQUÍ ESTÁ LA CORRECCIÓN: usamos 'timer-string' en lugar de 'timer-display'
+// Y le hemos quitado los // para que se ejecute
+document.getElementById('timer-string').innerText = `${mins}:${secs.toString().padStart(2, '0')}`;
+
+console.log("Tiempo restante:", tiempoRestante);
+                // -----------------------------------------------------
+
                 if (tiempoRestante <= 0) {
                     clearInterval(window.timerInterval);
                     if (window.matchActivo) {
-                        // Determinar ganador
                         let ganador = (window.puntosL > window.puntosR) ? "EQUIPO L" : "EQUIPO R";
                         avanzarGanador(window.matchActivo, ganador);
                     } else {
@@ -43,6 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 1000);
         });
     }
+});
 
     // --- LÓGICA DE REGALOS ---
     window.sumarPuntosManual = function(lado, puntos) {

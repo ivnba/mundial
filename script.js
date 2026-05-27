@@ -28,17 +28,26 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('score-val-l').innerText = "0";
             document.getElementById('score-val-r').innerText = "0";
 
-            window.timerInterval = setInterval(() => {
-                tiempoRestante--;
-                let min = Math.floor(tiempoRestante / 60).toString().padStart(2, '0');
-                let sec = (tiempoRestante % 60).toString().padStart(2, '0');
-                document.getElementById('timer-string').innerText = `${min}:${sec}`;
+           // ... dentro de tu script.js, en la lógica del botón iniciar ...
+window.timerInterval = setInterval(() => {
+    tiempoRestante--;
+    let min = Math.floor(tiempoRestante / 60).toString().padStart(2, '0');
+    let sec = (tiempoRestante % 60).toString().padStart(2, '0');
+    document.getElementById('timer-string').innerText = `${min}:${sec}`;
 
-                if (tiempoRestante <= 0) {
-                    clearInterval(window.timerInterval);
-                    alert("¡Tiempo terminado!");
-                }
-            }, 1000);
+    if (tiempoRestante <= 0) {
+        clearInterval(window.timerInterval);
+        alert("¡Tiempo terminado! Calculando ganador...");
+        
+        // AQUÍ ESTÁ EL CAMBIO: Llamamos a la función que ya tienes en index.html
+        if (typeof window.parent.avanzarGanadorAutomatico === 'function') {
+            window.parent.avanzarGanadorAutomatico();
+        } else {
+            // Si la función está en el mismo archivo, simplemente llámala:
+            avanzarGanadorAutomatico();
+        }
+    }
+}, 1000);
         });
     }
 });

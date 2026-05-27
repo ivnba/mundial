@@ -120,24 +120,18 @@ socket.onmessage = (event) => {
             }
         }
 
-    function sumarPuntos(idRegalo, equipo) {
+  function sumarPuntos(idRegalo, equipo) {
     const puntos = valoresRegalos[idRegalo] || 0;
-    const idElemento = equipo === 'Team1' ? 'score-val-l' : 'score-val-r';
-    const marcador = document.getElementById(idElemento);
     
-    console.log(`Intentando sumar ${puntos} al elemento con ID: ${idElemento}`);
-
-    if (marcador) {
-        // Obtenemos el valor actual
-        let valorActual = parseInt(marcador.innerText.replace(/[^0-9]/g, '')) || 0;
-        let nuevoTotal = valorActual + puntos;
-        
-        // FORZAMOS el cambio de dos maneras diferentes
-        marcador.innerText = nuevoTotal;
-        marcador.innerHTML = nuevoTotal; 
-        
-        console.log(`✅ CAMBIO REALIZADO: El nuevo valor en el HTML es ${nuevoTotal}`);
+    // 1. Determina el lado: 1 para izquierda, 2 para derecha
+    const lado = equipo === 'Team1' ? 1 : 2;
+    
+    console.log(`Llamando a la función manual con lado=${lado} y puntos=${puntos}`);
+    
+    // 2. Usamos tu función original que ya sabemos que funciona
+    if (typeof sumarPuntosManual === 'function') {
+        sumarPuntosManual(lado, puntos);
     } else {
-        console.error(`❌ ERROR: No se encontró el elemento con ID: ${idElemento}`);
+        console.error("Error: La función sumarPuntosManual no existe.");
     }
 }

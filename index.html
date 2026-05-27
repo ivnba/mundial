@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
+<<head>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
     <meta charset="UTF-8">
     <title>Mundial TikTok HUD - Interactivo</title>
     <style>
@@ -402,27 +404,31 @@
             <button class="btn-action-top btn-cyan-glow" id="btn-start-clock">Iniciar</button>
         </div>
         <button class="btn-action-top btn-red-pill">Borrar Récords</button>
-        <button class="btn-action-top btn-green-pill" onclick="openSetupModal()">Nueva Ronda</button>
+       <button class="btn-action-top btn-green-pill" onclick="openSetupModal()">Nueva Ronda</button>
         <div class="input-user" style="border-color:#00f2fe; color:#00f2fe;">23331 / 25000 Tokens</div>
     </div>
 
     <div class="workspace">
         
-        <div class="left-panel-ranking">
-            <div class="section-title">TOP HISTORICO</div>
-            <div class="ranking-node">
-                <div class="circle-flag-frame"><img src="https://flagcdn.com/w160/sv.png"></div>
-                <div class="count-badge">4</div>
-            </div>
-            <div class="ranking-node">
-                <div class="circle-flag-frame"><img src="https://flagcdn.com/w160/hn.png"></div>
-                <div class="count-badge">4</div>
-            </div>
-            <div class="ranking-node">
-                <div class="circle-flag-frame"><img src="https://flagcdn.com/w160/pa.png"></div>
-                <div class="count-badge">2</div>
-            </div>
-        </div>
+     <div class="left-panel-ranking" id="ranking-container">
+    <div class="section-title">TOP HISTORICO</div>
+    </div>
+
+<button onclick="borrarHistorico()" class="btn-borrar">Borrar Records</button>
+
+    <div class="ranking-node">
+        <div class="circle-flag-frame"><img src="https://flagcdn.com/w160/sv.png"></div>
+        <div class="count-badge">4</div>
+    </div>
+    <div class="ranking-node">
+        <div class="circle-flag-frame"><img src="https://flagcdn.com/w160/hn.png"></div>
+        <div class="count-badge">4</div>
+    </div>
+    <div class="ranking-node">
+        <div class="circle-flag-frame"><img src="https://flagcdn.com/w160/pa.png"></div>
+        <div class="count-badge">2</div>
+    </div>
+</div>
 
         <div class="canvas-tournament-wrapper">
             <div class="versus-header-hud">
@@ -446,102 +452,143 @@
 
             <div class="canvas-blueprint-bg">
                 
-                <<div class="fixture-column">
+     <div class="fixture-column">
     <div id="match-o1" class="match-box-node" onclick="setActiveMatch('match-o1')" data-next="match-q1" data-slot="1">
         <div class="stage-indicator">Octavos</div>
-        <div class="team-slot" data-code="ar"><img class="mini-flag-icon" src="https://flagcdn.com/w20/ar.png"> ARG</div>
-        <div class="team-slot" data-code="co"><img class="mini-flag-icon" src="https://flagcdn.com/w20/co.png"> COL</div>
-    </div>
-    <div id="match-o2" class="match-box-node" onclick="setActiveMatch('match-o2')" data-next="match-q1" data-slot="2">
-        <div class="stage-indicator">Octavos</div>
-        <div class="team-slot" data-code="ve"><img class="mini-flag-icon" src="https://flagcdn.com/w20/ve.png"> VEN</div>
-        <div class="team-slot" data-code="mx"><img class="mini-flag-icon" src="https://flagcdn.com/w20/mx.png"> MEX</div>
-    </div>
-    <div id="match-o3" class="match-box-node" onclick="setActiveMatch('match-o3')" data-next="match-q2" data-slot="1">
-        <div class="stage-indicator">Octavos</div>
-        <div class="team-slot" data-code="ec"><img class="mini-flag-icon" src="https://flagcdn.com/w20/ec.png"> ECU</div>
-        <div class="team-slot" data-code="gt"><img class="mini-flag-icon" src="https://flagcdn.com/w20/gt.png"> GUA</div>
-    </div>
-    <div id="match-o4" class="match-box-node" onclick="setActiveMatch('match-o4')" data-next="match-q2" data-slot="2">
-        <div class="stage-indicator">Octavos</div>
-        <div class="team-slot" data-code="hn"><img class="mini-flag-icon" src="https://flagcdn.com/w20/hn.png"> HON</div>
-        <div class="team-slot" data-code="cr"><img class="mini-flag-icon" src="https://flagcdn.com/w20/cr.png"> CRI</div>
-    </div>
+        <div class="team-slot" onclick="event.stopPropagation(); clasificarManual('match-o1', 0)" data-code="ar">
+            <img class="mini-flag-icon" src="https://flagcdn.com/w20/ar.png"> ARG
+        </div>
+        <div class="team-slot" onclick="event.stopPropagation(); clasificarManual('match-o1', 1)" data-code="co">
+            <img class="mini-flag-icon" src="https://flagcdn.com/w20/co.png"> COL
+        </div>
     </div>
 
-   <div class="fixture-column cuartos">
-    <div id="match-q1" class="match" data-next="match-s1">
+    <div id="match-o2" class="match-box-node" onclick="setActiveMatch('match-o2')" data-next="match-q1" data-slot="2">
+        <div class="stage-indicator">Octavos</div>
+        <div class="team-slot" onclick="event.stopPropagation(); clasificarManual('match-o2', 0)" data-code="ve">
+            <img class="mini-flag-icon" src="https://flagcdn.com/w20/ve.png"> VEN
+        </div>
+        <div class="team-slot" onclick="event.stopPropagation(); clasificarManual('match-o2', 1)" data-code="mx">
+            <img class="mini-flag-icon" src="https://flagcdn.com/w20/mx.png"> MEX
+        </div>
+    </div>
+
+    <div id="match-o3" class="match-box-node" onclick="setActiveMatch('match-o3')" data-next="match-q2" data-slot="1">
+        <div class="stage-indicator">Octavos</div>
+        <div class="team-slot" onclick="event.stopPropagation(); clasificarManual('match-o3', 0)" data-code="ec">
+            <img class="mini-flag-icon" src="https://flagcdn.com/w20/ec.png"> ECU
+        </div>
+        <div class="team-slot" onclick="event.stopPropagation(); clasificarManual('match-o3', 1)" data-code="gt">
+            <img class="mini-flag-icon" src="https://flagcdn.com/w20/gt.png"> GUA
+        </div>
+    </div>
+
+    <div id="match-o4" class="match-box-node" onclick="setActiveMatch('match-o4')" data-next="match-q2" data-slot="2">
+        <div class="stage-indicator">Octavos</div>
+        <div class="team-slot" onclick="event.stopPropagation(); clasificarManual('match-o4', 0)" data-code="hn">
+            <img class="mini-flag-icon" src="https://flagcdn.com/w20/hn.png"> HON
+        </div>
+        <div class="team-slot" onclick="event.stopPropagation(); clasificarManual('match-o4', 1)" data-code="cr">
+            <img class="mini-flag-icon" src="https://flagcdn.com/w20/cr.png"> CRI
+        </div>
+    </div>
+</div>
+
+   <<div class="fixture-column cuartos">
+    <div id="match-q1" class="match-box-node match" onclick="setActiveMatch('match-q1')" data-next="match-s1" data-slot="1">
         <div class="stage-indicator">Cuartos</div>
-        <div class="team-slot empty">...</div>
-        <div class="team-slot empty">...</div>
+        <div class="team-slot empty" onclick="event.stopPropagation(); clasificarManual('match-q1', 0)">...</div>
+        <div class="team-slot empty" onclick="event.stopPropagation(); clasificarManual('match-q1', 1)">...</div>
     </div>
     
-    <div id="match-q2" class="match" data-next="match-s1">
+    <div id="match-q2" class="match-box-node match" onclick="setActiveMatch('match-q2')" data-next="match-s1" data-slot="2">
         <div class="stage-indicator">Cuartos</div>
+        <div class="team-slot empty" onclick="event.stopPropagation(); clasificarManual('match-q2', 0)">...</div>
+        <div class="team-slot empty" onclick="event.stopPropagation(); clasificarManual('match-q2', 1)">...</div>
+    </div>
+</div>
+    <div class="fixture-column semis">
+    <div id="match-s1" class="match-box-node match" onclick="setActiveMatch('match-s1')" data-next="match-f1" data-slot="1">
+        <div class="stage-indicator">Semifinal</div>
+        
+        <div class="team-slot empty" onclick="event.stopPropagation(); clasificarManual('match-s1', 0)">...</div>
+        
+        <div class="team-slot empty" onclick="event.stopPropagation(); clasificarManual('match-s1', 1)">...</div>
+    </div>
+</div>
+    <div class="fixture-column final">
+    <div id="match-f1" class="match-box-node match" onclick="setActiveMatch('match-f1')">
+        <div class="stage-indicator">FINAL</div>
         <div class="team-slot empty">...</div>
         <div class="team-slot empty">...</div>
     </div>
 </div>
-    <div class="fixture-column semis">
-        <div id="match-s1" class="match-box-node" data-next="match-f1">
-            <div class="stage-indicator">Semifinal</div>
-            <div class="team-slot empty">...</div>
-            <div class="team-slot empty">...</div>
-        </div>
-    </div>
-
-    <div class="center-axis-finals">
-        <div class="grand-final-title">LA FINAL</div>
-        <div id="match-f1" class="match-box-node">
-            <div class="team-slot empty">?</div>
-            <div class="team-slot empty">?</div>
-        </div>
-    </div>
 
     <div class="fixture-column semis">
-        <div id="match-s2" class="match-box-node" data-next="match-f1">
-            <div class="stage-indicator">Semifinal</div>
-            <div class="team-slot empty">...</div>
-            <div class="team-slot empty">...</div>
-        </div>
+    <div id="match-s2" class="match-box-node match" onclick="setActiveMatch('match-s2')" data-next="match-f1" data-slot="2">
+        <div class="stage-indicator">Semifinal</div>
+        
+        <div class="team-slot empty" onclick="event.stopPropagation(); clasificarManual('match-s2', 0)">...</div>
+        
+        <div class="team-slot empty" onclick="event.stopPropagation(); clasificarManual('match-s2', 1)">...</div>
     </div>
+</div>
 
                 <div class="fixture-column cuartos">
-    <div id="match-q3" class="match" data-next="match-s2">
+    <div id="match-q3" class="match-box-node match" onclick="setActiveMatch('match-q3')" data-next="match-s2" data-slot="1">
         <div class="stage-indicator">Cuartos</div>
-        <div class="team-slot empty">...</div>
-        <div class="team-slot empty">...</div>
+        <div class="team-slot empty" onclick="event.stopPropagation(); clasificarManual('match-q3', 0)">...</div>
+        <div class="team-slot empty" onclick="event.stopPropagation(); clasificarManual('match-q3', 1)">...</div>
     </div>
     
-    <div id="match-q4" class="match" data-next="match-s2">
+    <div id="match-q4" class="match-box-node match" onclick="setActiveMatch('match-q4')" data-next="match-s2" data-slot="2">
         <div class="stage-indicator">Cuartos</div>
-        <div class="team-slot empty">...</div>
-        <div class="team-slot empty">...</div>
+        <div class="team-slot empty" onclick="event.stopPropagation(); clasificarManual('match-q4', 0)">...</div>
+        <div class="team-slot empty" onclick="event.stopPropagation(); clasificarManual('match-q4', 1)">...</div>
     </div>
 </div>
 
                 <div class="fixture-column">
-                    <div id="match-o5" class="match-box-node" onclick="setActiveMatch('match-o5')" data-next="match-q3" data-slot="1">
-                        <div class="stage-indicator">Octavos</div>
-                        <div class="team-slot" data-code="pa"><img class="mini-flag-icon" src="https://flagcdn.com/w20/pa.png"> PAN</div>
-                        <div class="team-slot" data-code="ni"><img class="mini-flag-icon" src="https://flagcdn.com/w20/ni.png"> NIC</div>
-                    </div>
-                    <div id="match-o6" class="match-box-node" onclick="setActiveMatch('match-o6')" data-next="match-q3" data-slot="2">
-                        <div class="team-slot" data-code="pr"><img class="mini-flag-icon" src="https://flagcdn.com/w20/pr.png"> PUR</div>
-                        <div class="team-slot" data-code="cu"><img class="mini-flag-icon" src="https://flagcdn.com/w20/cu.png"> CUB</div>
-                    </div>
-                    <div id="match-o7" class="match-box-node" onclick="setActiveMatch('match-o7')" data-next="match-q4" data-slot="1">
-                        <div class="team-slot" data-code="es"><img class="mini-flag-icon" src="https://flagcdn.com/w20/es.png"> ESP</div>
-                        <div class="team-slot" data-code="pe"><img class="mini-flag-icon" src="https://flagcdn.com/w20/pe.png"> PER</div>
-                    </div>
-                   <div id="match-o8" class="match-box-node" onclick="setActiveMatch('match-o8')" data-next="match-q4" data-slot="2">
-                        <div class="team-slot" data-code="cl"><img class="mini-flag-icon" src="https://flagcdn.com/w20/cl.png"> CHI</div>
-                        <div class="team-slot" data-code="py"><img class="mini-flag-icon" src="https://flagcdn.com/w20/py.png"> PAR</div>
-                    </div>
-                </div>
-
-            </div>
+    <div id="match-o5" class="match-box-node" onclick="setActiveMatch('match-o5')" data-next="match-q3" data-slot="1">
+        <div class="stage-indicator">Octavos</div>
+        <div class="team-slot" onclick="event.stopPropagation(); clasificarManual('match-o5', 0)" data-code="pa">
+            <img class="mini-flag-icon" src="https://flagcdn.com/w20/pa.png"> PAN
         </div>
+        <div class="team-slot" onclick="event.stopPropagation(); clasificarManual('match-o5', 1)" data-code="ni">
+            <img class="mini-flag-icon" src="https://flagcdn.com/w20/ni.png"> NIC
+        </div>
+    </div>
+
+    <div id="match-o6" class="match-box-node" onclick="setActiveMatch('match-o6')" data-next="match-q3" data-slot="2">
+        <div class="stage-indicator">Octavos</div>
+        <div class="team-slot" onclick="event.stopPropagation(); clasificarManual('match-o6', 0)" data-code="pr">
+            <img class="mini-flag-icon" src="https://flagcdn.com/w20/pr.png"> PUR
+        </div>
+        <div class="team-slot" onclick="event.stopPropagation(); clasificarManual('match-o6', 1)" data-code="cu">
+            <img class="mini-flag-icon" src="https://flagcdn.com/w20/cu.png"> CUB
+        </div>
+    </div>
+
+    <div id="match-o7" class="match-box-node" onclick="setActiveMatch('match-o7')" data-next="match-q4" data-slot="1">
+        <div class="stage-indicator">Octavos</div>
+        <div class="team-slot" onclick="event.stopPropagation(); clasificarManual('match-o7', 0)" data-code="es">
+            <img class="mini-flag-icon" src="https://flagcdn.com/w20/es.png"> ESP
+        </div>
+        <div class="team-slot" onclick="event.stopPropagation(); clasificarManual('match-o7', 1)" data-code="pe">
+            <img class="mini-flag-icon" src="https://flagcdn.com/w20/pe.png"> PER
+        </div>
+    </div>
+
+    <div id="match-o8" class="match-box-node" onclick="setActiveMatch('match-o8')" data-next="match-q4" data-slot="2">
+        <div class="stage-indicator">Octavos</div>
+        <div class="team-slot" onclick="event.stopPropagation(); clasificarManual('match-o8', 0)" data-code="cl">
+            <img class="mini-flag-icon" src="https://flagcdn.com/w20/cl.png"> CHI
+        </div>
+        <div class="team-slot" onclick="event.stopPropagation(); clasificarManual('match-o8', 1)" data-code="py">
+            <img class="mini-flag-icon" src="https://flagcdn.com/w20/py.png"> PAR
+        </div>
+    </div>
+</div>
 
         <div style="flex: 1; text-align: center;">
     <div class="gift-section-title left-side" id="titulo-izq">IZQUIERDA</div>
@@ -741,5 +788,18 @@
 
         function resetTableroCompleto(limpiarTodo = true) {
             // ... (todo tu código que ya tienes) ...
+
         }
-</body>
+<div id="setup-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:9999; justify-content:center; align-items:center; flex-direction:column;">
+    <h2 style="color:white;">SELECCIONA EQUIPOS</h2>
+    
+    <div id="country-grid" style="display:grid; grid-template-columns:repeat(8, 1fr); gap:10px; max-width: 800px; padding:20px;">
+    </div>
+    
+    <button onclick="document.getElementById('setup-modal').style.display='none'" style="margin-top:20px; padding:10px 20px; cursor:pointer;">Cerrar</button>
+</div>
+    </body>
+<div id="winner-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; justify-content:center; align-items:center; flex-direction:column; color:white; font-size:3em; font-weight:bold;">
+    <div id="winner-name"></div>
+    <button onclick="document.getElementById('winner-overlay').style.display='none'" style="margin-top:20px; padding:10px 20px;">Cerrar</button>
+</div>

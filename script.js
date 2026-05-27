@@ -98,48 +98,42 @@ socket.onmessage = (event) => {
     // 1. Mostramos todo lo que llega para que siempre puedas ver qué está pasando
     console.log("Evento recibido:", data);
 
-    // 2. Lógica para procesar regalos
+// 2. Lógica para procesar regalos
         if (data.event === "gift") {
             const idRegalo = data.data.giftId.toString();
-            console.log("ID de regalo detectado:", idRegalo);
+            console.log("ID recibido:", idRegalo);
 
-            // Verificamos si el regalo existe en tu mapa
-            if (mapaRegalos[idRegalo]) {
+            // 1. Verificamos si existe en el mapa
+            if (mapaRegalos.hasOwnProperty(idRegalo)) {
                 const rutaImagen = mapaRegalos[idRegalo];
                 
-                // Detectamos automáticamente si el archivo es t1 o t2
-                const esTeam1 = rutaImagen.includes('_t1.png');
-                const equipo = esTeam1 ? 'Team1' : 'Team2';
+                // 2. Detección automática de equipo
+                const equipo = rutaImagen.includes('_t1') ? 'Team1' : 'Team2';
                 
-                // ... dentro de tu socket.onmessage, donde ya tienes el equipo detectado:
-console.log(`Regalo ${idRegalo} procesado para: ${equipo}`);
+                console.log("Equipo detectado para el regalo:", equipo);
 
-// 3. Actualizamos la imagen
-actualizarRegalo(idRegalo, equipo);
-
-// 4. NUEVO: Sumamos los puntos al equipo correspondiente
-sumarPuntos(idRegalo, equipo);
+                // 3. Acciones
+                actualizarRegalo(idRegalo, equipo);
+                sumarPuntos(idRegalo, equipo);
+            } else {
+                console.warn("El ID de regalo recibido NO está en mapaRegalos:", idRegalo);
             }
         }
 
-function sumarPuntos(idRegalo, equipo) {
-    const puntos = valoresRegalos[idRegalo] || 0;
-    
-    // Traducimos Team1 a 'l' (izquierda) y Team2 a 'r' (derecha)
-    const lado = equipo === 'Team1' ? 'l' : 'r';
-    const idMarcador = `score-val-${lado}`;
-    
-    const marcador = document.getElementById(idMarcador);
-    
-    if (marcador) {
-        // Obtenemos el valor actual del HTML
-        let puntosActuales = parseInt(marcador.innerText) || 0;
+    function sumarPuntos(idRegalo, equipo) {
+        const puntos = valoresRegalos[idRegalo] || 0;
         
-        // Sumamos y actualizamos
-        marcador.innerText = puntosActuales + puntos;
+        // Traducimos Team1 a 'l' (izquierda) y Team2 a 'r' (derecha)
+        const lado = equipo === 'Team1' ? 'l' : 'r';
+        const idMarcador = `score-val-${lado}`;
         
-        console.log(`Sumados ${puntos} al lado ${lado}. Total: ${puntosActuales + puntos}`);
-    } else {
-        console.log(`Error: No se encontró el marcador con ID ${idMarcador}`);
+        const marcador = document.getElementById(idMarcador);
+        
+        if (marcador) {
+            let puntosActuales = parseInt(marcador.innerText) || 0;
+            marcador.innerText = puntosActuales + puntos;
+            console.log(`Sumados ${puntos} al lado ${lado}. Total: ${puntosActuales + puntos}`);
+        } else {
+            console.log(`Error: No se encontró el marcador con ID ${idMarcador}`);
+        }
     }
-}

@@ -107,14 +107,13 @@ document.addEventListener("DOMContentLoaded", function() {
     };
 
     socket.onerror = function(e) { console.error("Error en WebSocket:", e); };
-});
+}); // Esta llave cierra el DOMContentLoaded
 
 // --- LÓGICA DE SUMA ---
 function sumarPuntos(idRegalo, equipo) {
     const puntos = valoresRegalos[idRegalo] || 0;
     const lado = equipo === 'Team1' ? 1 : 2;
     
-    // Verificamos si la función existe antes de llamarla
     if (typeof window.sumarPuntosManual !== 'undefined') {
         sumarPuntosManual(lado, puntos);
     } else {

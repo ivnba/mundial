@@ -645,23 +645,6 @@
             document.getElementById('energy-bar').style.width = total === 0 ? '50%' : (puntosL / total * 100) + '%';
         }
 
-        // Reloj de partida
-        document.getElementById('btn-start-clock').addEventListener('click', function() {
-            clearInterval(window.timerInterval);
-            tiempoRestante = parseInt(document.getElementById('select-duration').value);
-            timerInterval = setInterval(() => {
-                tiempoRestante--;
-                let min = Math.floor(tiempoRestante / 60).toString().padStart(2, '0');
-                let sec = (tiempoRestante % 60).toString().padStart(2, '0');
-                document.getElementById('timer-string').innerText = `${min}:${sec}`;
-
-                if (tiempoRestante <= 0) {
-                    clearInterval(timerInterval);
-                    avanzarGanadorAutomatico();
-                }
-            }, 1000);
-        });
-
         // PASAR AUTOMÁTICO AL GANAR
         function avanzarGanadorAutomatico() {
             const activeBox = document.getElementById(activeMatchId);

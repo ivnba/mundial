@@ -125,14 +125,21 @@ sumarPuntos(idRegalo, equipo);
 function sumarPuntos(idRegalo, equipo) {
     const puntos = valoresRegalos[idRegalo] || 0;
     
-    // Asumiendo que tus marcadores en HTML tienen IDs como 'score-Team1' y 'score-Team2'
-    const marcador = document.getElementById(`score-${equipo}`);
+    // Traducimos Team1 a 'l' (izquierda) y Team2 a 'r' (derecha)
+    const lado = equipo === 'Team1' ? 'l' : 'r';
+    const idMarcador = `score-val-${lado}`;
+    
+    const marcador = document.getElementById(idMarcador);
     
     if (marcador) {
+        // Obtenemos el valor actual del HTML
         let puntosActuales = parseInt(marcador.innerText) || 0;
+        
+        // Sumamos y actualizamos
         marcador.innerText = puntosActuales + puntos;
-        console.log(`Sumados ${puntos} puntos al ${equipo}. Total: ${puntosActuales + puntos}`);
+        
+        console.log(`Sumados ${puntos} al lado ${lado}. Total: ${puntosActuales + puntos}`);
     } else {
-        console.log(`Error: No se encontró el marcador con ID score-${equipo}`);
+        console.log(`Error: No se encontró el marcador con ID ${idMarcador}`);
     }
 }

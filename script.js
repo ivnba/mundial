@@ -8,10 +8,9 @@ const valoresRegalos = {
     "5269": 1, "8913": 10, "5879": 30, "6427": 100, "7168": 500
 };
 
-// --- VARIABLES GLOBALES ---
+// Al inicio de tu script.js
 window.puntosL = 0;
 window.puntosR = 0;
-window.timerInterval = null;
 
 // --- LÓGICA DEL BOTÓN Y RELOJ ---
 document.addEventListener('DOMContentLoaded', () => {
@@ -30,40 +29,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
            // ... dentro de tu script.js, en la lógica del botón iniciar ...
 window.timerInterval = setInterval(() => {
-    tiempoRestante--;
-    let min = Math.floor(tiempoRestante / 60).toString().padStart(2, '0');
-    let sec = (tiempoRestante % 60).toString().padStart(2, '0');
-    document.getElementById('timer-string').innerText = `${min}:${sec}`;
+    // ... dentro de tu setInterval en script.js ...
+if (tiempoRestante <= 0) {
+    clearInterval(window.timerInterval);
+    alert("¡Tiempo terminado! Calculando ganador...");
 
-    if (tiempoRestante <= 0) {
-        clearInterval(window.timerInterval);
-        alert("¡Tiempo terminado! Calculando ganador...");
-        
-        // AQUÍ ESTÁ EL CAMBIO: Llamamos a la función que ya tienes en index.html
-        if (typeof window.parent.avanzarGanadorAutomatico === 'function') {
-            window.parent.avanzarGanadorAutomatico();
-        } else {
-            // Si la función está en el mismo archivo, simplemente llámala:
-            avanzarGanadorAutomatico();
-        }
+    // Llamada directa, ya que ahora es una función global del window
+    if (typeof window.avanzarGanadorAutomatico === 'function') {
+        window.avanzarGanadorAutomatico();
+    } else {
+        console.error("Error: avanzarGanadorAutomatico no está disponible.");
     }
-}, 1000);
+}
         });
     }
 });
 
 // --- LÓGICA DE REGALOS ---
 window.sumarPuntosManual = function(lado, puntos) {
-    const scoreL = document.getElementById('score-val-l');
-    const scoreR = document.getElementById('score-val-r');
-    const barra = document.getElementById('energy-bar');
-
-    if (lado === 1) {
-        window.puntosL += puntos;
-        scoreL.innerText = window.puntosL;
+    if (lado === "t1") {
+        window.puntosL = (window.puntosL || 0) + puntos;
+        document.getElementById('score-val-l').innerText = window.puntosL;
     } else {
-        window.puntosR += puntos;
-        scoreR.innerText = window.puntosR;
+        window.puntosR = (window.puntosR || 0) + puntos;
+        document.getElementById('score-val-r').innerText = window.puntosR;
+    }
+    // ... resto del código de la barra ...
+};
     }
 
     let total = window.puntosL + window.puntosR;

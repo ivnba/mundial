@@ -34,11 +34,11 @@ if (tiempoRestante <= 0) {
     clearInterval(window.timerInterval);
     alert("¡Tiempo terminado! Calculando ganador...");
 
-    // Llamada directa, ya que ahora es una función global del window
+    // Usamos 'window' para acceder a la función que está en index.html
     if (typeof window.avanzarGanadorAutomatico === 'function') {
         window.avanzarGanadorAutomatico();
     } else {
-        console.error("Error: avanzarGanadorAutomatico no está disponible.");
+        console.error("No se encuentra la función avanzarGanadorAutomatico");
     }
 }
         });

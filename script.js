@@ -12,53 +12,41 @@ window.puntosL = 0;
 window.puntosR = 0;
 window.matchActivo = 'match-o1'; 
 
-// 1. DECLARA ESTA VARIABLE FUERA DEL EVENTO
+// Variable global fuera de todo
 let tiempoRestante = 0; 
 
-document.addEventListener('DOMContentLoaded', () => {
-    const btnStart = document.getElementById('btn-start-clock');
+// 1. Obtén el botón del HTML usando su ID correcto
+const btnIniciar = document.getElementById('btn-start-clock');
 
-    if (btnStart) {
-        btnStart.addEventListener('click', function() {
-            console.log("Botón iniciado");
+// 2. Agrega el escuchador de eventos al botón
+btnIniciar.addEventListener('click', () => {
+    
+    // Si ya existe un cronómetro corriendo, lo detenemos antes de empezar uno nuevo
+    if (window.timerInterval) clearInterval(window.timerInterval);
+
+    // Obtenemos el tiempo seleccionado del <select> (id="select-duration")
+    let tiempoRestante = parseInt(document.getElementById('select-duration').value);
+    
+    // Obtenemos el contenedor donde mostrar el texto (id="timer-string")
+    const display = document.getElementById('timer-string');
+
+    // 3. Iniciamos el intervalo
+    window.timerInterval = setInterval(() => {
+        tiempoRestante--;
+
+        // Cálculos de minutos y segundos
+        let mins = Math.floor(tiempoRestante / 60);
+        let secs = tiempoRestante % 60;
+
+        // Actualizamos el texto en el HTML
+        display.innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+
+        // Condición de fin
+        if (tiempoRestante <= 0) {
             clearInterval(window.timerInterval);
-
-            // 2. ASIGNA EL VALOR A LA VARIABLE GLOBAL
-            tiempoRestante = parseInt(document.getElementById('select-duration').value);
-
-            window.puntosL = 0; 
-            window.puntosR = 0;
-            document.getElementById('score-val-l').innerText = "0";
-            document.getElementById('score-val-r').innerText = "0";
-
-            // 3. INICIA EL INTERVALO
-            window.timerInterval = setInterval(() => {
-                // ... dentro de tu setInterval ...
-tiempoRestante--;
-
-// CALCULA MINUTOS Y SEGUNDOS
-let mins = Math.floor(tiempoRestante / 60);
-let secs = tiempoRestante % 60;
-
-// AQUÍ ESTÁ LA CORRECCIÓN: usamos 'timer-string' en lugar de 'timer-display'
-// Y le hemos quitado los // para que se ejecute
-document.getElementById('timer-string').innerText = `${mins}:${secs.toString().padStart(2, '0')}`;
-
-console.log("Tiempo restante:", tiempoRestante);
-                // -----------------------------------------------------
-
-                if (tiempoRestante <= 0) {
-                    clearInterval(window.timerInterval);
-                    if (window.matchActivo) {
-                        let ganador = (window.puntosL > window.puntosR) ? "EQUIPO L" : "EQUIPO R";
-                        avanzarGanador(window.matchActivo, ganador);
-                    } else {
-                        console.warn("No se ha definido qué partido terminó");
-                    }
-                }
-            }, 1000);
-        });
-    }
+            alert("¡Tiempo terminado!");
+        }
+    }, 1000);
 });
 
     // --- LÓGICA DE REGALOS ---

@@ -123,14 +123,14 @@ socket.onmessage = (event) => {
     function sumarPuntos(idRegalo, equipo) {
         const puntos = valoresRegalos[idRegalo] || 0;
         
-        // Traducimos Team1 a 'l' (izquierda) y Team2 a 'r' (derecha)
+        // Traducimos Team1 a 'l' (izquierda) y Team2 a 'r' (derecha) para que coincida con tu HTML
         const lado = equipo === 'Team1' ? 'l' : 'r';
         const idMarcador = `score-val-${lado}`;
         
         const marcador = document.getElementById(idMarcador);
         
         if (marcador) {
-            let puntosActuales = parseInt(marcador.innerText) || 0;
+            let puntosActuales = parseInt(marcador.innerText.replace(/[^0-9]/g, '')) || 0;
             marcador.innerText = puntosActuales + puntos;
             console.log(`Sumados ${puntos} al lado ${lado}. Total: ${puntosActuales + puntos}`);
         } else {

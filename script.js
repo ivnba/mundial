@@ -1,4 +1,4 @@
-// Definición de objetos
+// 1. Definición de objetos de configuración
 const mapaRegalos = {
     "5655": "assets/regalos/regalo_1_t1.png",
     "9947": "assets/regalos/regalo_10_t1.png",
@@ -17,24 +17,49 @@ const valoresRegalos = {
     "5269": 1, "8913": 10, "5879": 30, "6427": 100, "7168": 500
 };
 
-// Función global para que el HTML pueda verla
+// 2. Función global para sumar puntos
+// Esta debe estar fuera de cualquier otro bloque para que el HTML la vea
 window.sumarPuntosManual = function(lado, puntos) {
     console.log("Sumando " + puntos + " al lado " + lado);
-    // AQUÍ VA TU LÓGICA QUE YA TENÍAS PARA ACTUALIZAR EL MARCADOR
+    
+    // AQUÍ VA TU LÓGICA DE MARCADOR
+    // Si usas IDs, asegúrate de que existan en tu HTML
+    // Ejemplo:
+    // const elemento = document.getElementById(lado === 1 ? 'puntos-izq' : 'puntos-der');
+    // elemento.innerText = parseInt(elemento.innerText) + puntos;
 };
 
-// Conexión
-document.addEventListener("DOMContentLoaded", function() {
-    const socket = new WebSocket('ws://localhost:21213/');
-    socket.onopen = function() { console.log("✅ Conexión establecida."); };
-    socket.onmessage = function(event) {
+// 3. Conexión WebSocket
+const socket = new WebSocket('ws://localhost:21213/');
+
+socket.onopen = function() {
+    console.log("✅ Conexión establecida con TikFinity.");
+};
+
+socket.onmessage = function(event) {
+    try {
         const data = JSON.parse(event.data);
+        console.log("Evento recibido:", data);
+
         if (data.event === "gift") {
             const idRegalo = data.data.giftId.toString();
+            
             if (mapaRegalos.hasOwnProperty(idRegalo)) {
-                const equipo = mapaRegalos[idRegalo].includes('_t1') ? 'Team1' : 'Team2';
-                window.sumarPuntosManual(equipo === 'Team1' ? 1 : 2, valoresRegalos[idRegalo]);
+                // Determinamos si es t1 (izq) o t2 (der) basándonos en tu mapa
+                const esT1 = mapaRegalos[idRegalo].includes('_t1');
+                const equipo = esT1 ? 1 : 2; // 1 para izquierdo, 2 para derecho
+                const puntos = valoresRegalos[idRegalo] || 0;
+                
+                // Ejecutamos la función global
+                window.sumarPuntosManual(equipo, puntos);
             }
         }
-    };
-});
+    } catch (e) {
+        console.error("Error al procesar mensaje:", e);
+    }
+};
+
+socket.onclose = function() {
+    console.warn("⚠️ Conexión cerrada. Reintentando...");
+    setTimeout(() => { location.reload(); }, 5000); // Recarga para reconectar
+};

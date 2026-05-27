@@ -121,28 +121,23 @@ socket.onmessage = (event) => {
         }
 
     function sumarPuntos(idRegalo, equipo) {
-    // 1. Obtenemos el valor del regalo según tu tabla
     const puntos = valoresRegalos[idRegalo] || 0;
-    
-    // 2. Determinamos qué marcador actualizar (l = izquierda, r = derecha)
     const idElemento = equipo === 'Team1' ? 'score-val-l' : 'score-val-r';
     const marcador = document.getElementById(idElemento);
     
+    console.log(`Intentando sumar ${puntos} al elemento con ID: ${idElemento}`);
+
     if (marcador) {
-        // 3. Obtenemos el valor actual, limpiamos y sumamos
+        // Obtenemos el valor actual
         let valorActual = parseInt(marcador.innerText.replace(/[^0-9]/g, '')) || 0;
         let nuevoTotal = valorActual + puntos;
         
-        // 4. Actualizamos el HTML
+        // FORZAMOS el cambio de dos maneras diferentes
         marcador.innerText = nuevoTotal;
+        marcador.innerHTML = nuevoTotal; 
         
-        // 5. Opcional: Actualizamos la barra de energía si la tienes vinculada
-        if(typeof actualizarBarraEnergia === 'function') {
-            actualizarBarraEnergia();
-        }
-        
-        console.log(`✅ Sumados ${puntos} puntos al ${idElemento}. Total: ${nuevoTotal}`);
+        console.log(`✅ CAMBIO REALIZADO: El nuevo valor en el HTML es ${nuevoTotal}`);
     } else {
-        console.error(`❌ No se encontró el elemento con ID: ${idElemento}`);
+        console.error(`❌ ERROR: No se encontró el elemento con ID: ${idElemento}`);
     }
 }

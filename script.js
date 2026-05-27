@@ -121,27 +121,28 @@ socket.onmessage = (event) => {
         }
 
     function sumarPuntos(idRegalo, equipo) {
+    // 1. Obtenemos el valor del regalo según tu tabla
     const puntos = valoresRegalos[idRegalo] || 0;
-    const lado = equipo === 'Team1' ? 'l' : 'r';
     
-    // Vamos a buscar el elemento de una forma más abierta
-    // Buscamos cualquier elemento que tenga 'score-val-' y 'l' o 'r' en su ID
-    const selector = `[id*="score-val-${lado}"]`;
-    const marcador = document.querySelector(selector);
+    // 2. Determinamos qué marcador actualizar (l = izquierda, r = derecha)
+    const idElemento = equipo === 'Team1' ? 'score-val-l' : 'score-val-r';
+    const marcador = document.getElementById(idElemento);
     
     if (marcador) {
-        // Obtenemos el texto y limpiamos todo lo que no sea número
-        let texto = marcador.innerText;
-        let puntosActuales = parseInt(texto.replace(/[^0-9]/g, '')) || 0;
+        // 3. Obtenemos el valor actual, limpiamos y sumamos
+        let valorActual = parseInt(marcador.innerText.replace(/[^0-9]/g, '')) || 0;
+        let nuevoTotal = valorActual + puntos;
         
-        let nuevoTotal = puntosActuales + puntos;
+        // 4. Actualizamos el HTML
         marcador.innerText = nuevoTotal;
         
-        console.log(`✅ ÉXITO: Sumados ${puntos} al ${lado}. Total: ${nuevoTotal}`);
+        // 5. Opcional: Actualizamos la barra de energía si la tienes vinculada
+        if(typeof actualizarBarraEnergia === 'function') {
+            actualizarBarraEnergia();
+        }
+        
+        console.log(`✅ Sumados ${puntos} puntos al ${idElemento}. Total: ${nuevoTotal}`);
     } else {
-        console.error(`❌ ERROR: No se encontró ningún elemento con ID que contenga 'score-val-${lado}'`);
-        // Debug extra: mostramos todos los IDs que existen en la página
-        const todosLosIds = Array.from(document.querySelectorAll('[id]')).map(el => el.id);
-        console.log("IDs disponibles en tu HTML:", todosLosIds);
+        console.error(`❌ No se encontró el elemento con ID: ${idElemento}`);
     }
 }
